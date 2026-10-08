@@ -245,8 +245,8 @@ class GDArenaServerHandler(SimpleHTTPRequestHandler):
             warning_msg = None
 
             if "[REJECT:" in ai_text:
-                match = re.search(r'\[REJECT:(.*?)\]', ai_text)
-                reason = match.group(1).strip() if match else "Off-topic or unprofessional remarks."
+                match = re.search(r'\[REJECT:(.*?)]', ai_text)
+                reason = match.group(1).strip() if match else "Off-topic or irrelevant remarks."
                 session["rubbish_warnings"] = warning_count + 1
                 warning_count = session["rubbish_warnings"]
 
@@ -257,11 +257,14 @@ class GDArenaServerHandler(SimpleHTTPRequestHandler):
                     ai_text = "We will contact you later. You have exceeded all 5 conduct and relevance warnings. This session is terminated."
                     next_spk = "interviewer" if session["mode"] == "interview" else "moderator"
                     persona = PERSONAS.get(next_spk, PERSONAS["aarav"])
+                    warning_msg = "Final Strike 5/5: Session Terminated."
                 else:
                     is_rejected = False
                     cleaned_ai = re.sub(r'\[REJECT:.*?\]', '', ai_text).strip()
-                    warning_msg = f"Warning {warning_count}/5 for off-topic/conduct: {reason}"
-                    ai_text = f"[Official Warning {warning_count}/5]: {cleaned_ai or 'Please stay strictly on topic and maintain professional debate conduct.'}"
+                    # Ensure warnings 1-4 never say 'we will contact you later' or 'session terminated'
+                    cleaned_ai = re.sub(r'(?i)(we will contact you later|session is terminated|this session is terminated|you are rejected)', '', cleaned_ai).strip(' .,-')
+                    warning_msg = f"Warning {warning_count}/5: {reason}"
+                    ai_text = f"[Official Warning {warning_count}/5]: {cleaned_ai or 'Please focus your remarks directly on the topic and maintain professional discussion standards.'}"
             else:
                 pass
 
@@ -496,7 +499,7 @@ class GDArenaServerHandler(SimpleHTTPRequestHandler):
         prompt = f"""{system_instruction}
 {resume_context}
 
-CRITICAL RULE: If the candidate speaks complete nonsense, gibberish, acts unprofessionally, or goes entirely off-topic, you MUST reject them immediately. Start your response EXACTLY with "[REJECT: <brief reason>]". Then say "We will contact you later. This session is terminated."
+CRITICAL RULE: If the candidate speaks complete nonsense, gibberish, acts unprofessionally, or goes entirely off-topic, you MUST flag it. Start your response EXACTLY with "[REJECT: <brief reason>]". Then give a brief 1-sentence warning reminding them to stay relevant to the topic. Do NOT write "We will contact you later" or terminate the session yourself (the system tracks warning counts automatically).
 
 Recent Discussion Context:
 {recent_context}
