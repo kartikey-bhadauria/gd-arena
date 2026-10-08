@@ -523,9 +523,11 @@ def generate_topics():
     return jsonify({"topics": topics})
 
 # 9. Fallback Static Files router for local serving
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
+@app.route('/', defaults={'path': ''}, methods=['GET', 'HEAD', 'POST', 'OPTIONS'])
+@app.route('/<path:path>', methods=['GET', 'HEAD', 'POST', 'OPTIONS'])
 def serve_static(path):
+    if request.method == 'OPTIONS':
+        return '', 200
     print(f"DEBUG REQUEST PATH: {path}")
     if not path or path == '/':
         path = 'index.html'
