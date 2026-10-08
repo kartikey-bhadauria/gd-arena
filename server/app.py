@@ -130,7 +130,12 @@ def generate_llm_turn(persona, topic, mode, student_text, transcript, resume=Non
     if resume and resume.get("skills"):
         resume_context = f"\nCandidate Stated Resume Profile: Skills: [{', '.join(resume['skills'][:5])}], Projects: [{', '.join(resume.get('projects', [])[:2])}]"
 
-    if mode == "interview":
+    casual_greetings = ["hello", "hi", "hey", "what's up", "sup", "yo", "test", "gm", "good morning"]
+    is_casual = any(g in student_text.lower() for g in casual_greetings) and len(student_text.split()) <= 5
+
+    if is_casual:
+        task_instruction = f"The candidate just said a casual greeting or off-topic chit-chat: '{student_text}'. In your unique persona style, call them out sharply for treating a professional placement group discussion like casual chat, and demand a serious technical argument on '{topic}'."
+    elif mode == "interview":
         task_instruction = f"You are interviewing the candidate on '{topic}'. Critically analyze their statement, probe technical depth, or ask a sharp follow-up question related to architecture, scaling, or edge cases."
     else:
         task_instruction = f"You are participating in a fast-paced, high-stakes campus placement group discussion on '{topic}'. Actively debate what was just said: agree, disagree, introduce concrete examples, or challenge the candidate's premises in your unique persona style."
