@@ -10,7 +10,9 @@ import urllib.parse
 import ssl
 import re
 import tempfile
+import base64
 from flask import Flask, request, jsonify, Response, send_from_directory
+from server.static_assets import STATIC_ASSETS
 
 # Ensure project root is on sys.path
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -525,10 +527,30 @@ def generate_topics():
 @app.route('/<path:path>')
 def serve_static(path):
     if not path or path == '/':
-        return send_from_directory(DIRECTORY, 'index.html')
-    full_path = os.path.join(DIRECTORY, path)
-    if os.path.exists(full_path) and not os.path.isdir(full_path):
-        return send_from_directory(DIRECTORY, path)
-    if os.path.exists(os.path.join(full_path, 'index.html')):
-        return send_from_directory(full_path, 'index.html')
-    return send_from_directory(DIRECTORY, 'index.html')
+        path = 'index.html'
+    
+    path = path.lstrip('/')
+    if path in STATIC_ASSETS:
+        asset = STATIC_ASSETS[path]
+        if asset['type'] == 'text':
+            ct = 'text/html'
+            if path.endswith('.css'): ct = 'text/css'
+            elif path.endswith('.js'): ct = 'application/javascript'
+            elif path.endswith('.png'): ct = 'image/png'
+            elif path.endswith('.ico'): ct = 'image/x-icon'
+            elif path.endswith('.json'): ct = 'application/json'
+            return Response(asset['content'], mimetype=ct)
+        else:
+            data = base64.b64decode(asset['content'])
+            ct = 'image/png' if path.endswith('.png') else 'image/x-icon'
+            return Response(data, mimetype=ct)
+            
+    if f"{path}/index.html" in STATIC_ASSETS:
+        asset = STATIC_ASSETS[f"{path}/index.html"]
+        return Response(asset['content'], mimetype='text/html')
+        
+    if 'index.html' in STATIC_ASSETS:
+        asset = STATIC_ASSETS['index.html']
+        return Response(asset['content'], mimetype='text/html')
+        
+    return "Not Found", 404
