@@ -12,42 +12,23 @@ document.addEventListener('DOMContentLoaded', () => {
   } catch (e) {}
 
   if (!report) {
-    // Generate sample authentic report data if opened directly
-    report = {
-      overall_score: 7.6,
-      tier: "Strong",
-      pass: true,
-      stats: {
-        total_words: 340,
-        talk_time_pct: { student: 28.5, aarav: 32.0, priya: 24.5, rohan: 15.0 },
-        student_words: 97,
-        interruptions: 1
-      },
-      dimensions: {
-        opening: { score: 8.0, quote: "[00:45] \"I believe AI will augment engineer productivity rather than replace junior roles completely.\"", comment: "Strong structured assertion; grounded debate early." },
-        idea_quality: { score: 7.5, quote: "[01:30] \"Junior devs handle glue code and edge case verification that models struggle with.\"", comment: "Solid domain logic; effectively countered Aarav." },
-        building_on_others: { score: 7.0, quote: "[03:15] \"Building on Priya's metric regarding latency overhead...\"", comment: "Good explicit reference to peer arguments." },
-        listening: { score: 8.5, quote: "[02:10] Listened attentively during Aarav's counter.", comment: "Maintained poise under aggressive interruption." },
-        handling_interruptions: { score: 7.5, quote: "[03:40] Recovered floor calmly.", comment: "Assertive voice modulation without aggression." },
-        closing: { score: 7.0, quote: "[04:20] \"To summarize, AI accelerates coding velocity while humans preserve architectural integrity.\"", comment: "Clear consensus synthesis." }
-      },
-      strengths: [
-        "Composed demeanor when challenged directly by Aarav on production latency.",
-        "Structured reasoning using concrete industry examples instead of generic buzzwords."
-      ],
-      weaknesses: [
-        "Could cite more exact quantitative benchmarks (e.g. error rate deltas) to solidify claims.",
-        "Slight delay (2.5s) before jumping into the opening round."
-      ],
-      missed_openings: [
-        { ts: "02:15", what_happened: "Priya presented a flawed scalability assumption regarding serverless cold starts.", what_you_could_have_said: "Priya makes a valid point on compute cost, but cold start latencies remain the primary blocker." }
-      ],
-      drills: [
-        "Drill 1: STAR method rapid response to high-concurrency architecture challenges.",
-        "Drill 2: 15-second opening assertion structuring drill.",
-        "Drill 3: Counter-argument synthesis under aggressive peer interruption."
-      ]
-    };
+    // No active session report found — guide user to start a real session
+    const mainEl = document.querySelector('main') || document.body;
+    mainEl.innerHTML = `
+      <div class="max-w-2xl mx-auto py-20 px-6 text-center">
+        <div class="w-16 h-16 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-amber-200">
+          <i data-lucide="alert-circle" class="w-8 h-8"></i>
+        </div>
+        <h1 class="text-2xl font-bold text-stone-900 mb-2">No Active Session Report Found</h1>
+        <p class="text-stone-600 mb-8 text-sm">Please complete a live Group Discussion or 1-on-1 Technical Interview session to generate your authentic API-evaluated scorecard.</p>
+        <div class="flex items-center justify-center gap-4">
+          <a href="/pages/mode-select.html" class="btn-primary text-sm py-2.5 px-6">Start New Practice Session</a>
+          <a href="/pages/history.html" class="btn-secondary text-sm py-2.5 px-6">View Past History</a>
+        </div>
+      </div>
+    `;
+    if (window.lucide) window.lucide.createIcons();
+    return;
   }
 
   // Save to history storage

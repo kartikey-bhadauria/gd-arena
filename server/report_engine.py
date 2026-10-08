@@ -37,7 +37,13 @@ def score_session_stats(transcript, interruptions=0):
         "interruptions": interruptions
     }
 
-def generate_report_json(transcript, topic, stats):
+def generate_report_json(transcript, topic, stats, mode="gd"):
+    """
+    Generate a fully data-driven report tailored to:
+    - mode="interview" : 1-on-1 Ms. Kapoor interview → technical depth, follow-ups, architecture
+    - mode="gd"        : 1v4 group discussion → leadership, synthesis, barge-in, peer dynamics
+    All scores and quotes derived from actual session transcript.
+    """
     student_entries = [t for t in transcript if t.get("speaker") in ["student", "user", "candidate"]]
     has_student = len(student_entries) > 0
 

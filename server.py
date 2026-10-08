@@ -383,7 +383,8 @@ class GDArenaServerHandler(SimpleHTTPRequestHandler):
                     "drills": ["Practice structured answering, professional debate boundaries, and active listening."]
                 }
             else:
-                report_data = generate_report_json(transcript, topic, stats)
+                mode = session.get('mode', 'gd')
+                report_data = generate_report_json(transcript, topic, stats, mode=mode)
 
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')

@@ -77,19 +77,21 @@
     document.addEventListener('DOMContentLoaded', () => {
       if (window.lucide) window.lucide.createIcons();
 
-      const defaultSessions = [
-        { id: "1", date: "Oct 08, 2026", topic: "Should AI Replace Software Engineers in Campus Hiring?", score: 7.8, tier: "Strong", mode: "gd" },
-        { id: "2", date: "Oct 07, 2026", topic: "High-Concurrency Distributed Caching 1-on-1 Interview", score: 6.9, tier: "Strong", mode: "interview" },
-        { id: "3", date: "Oct 05, 2026", topic: "Is Remote Work Killing Junior Engineer Mentorship?", score: 5.8, tier: "Average", mode: "gd" }
-      ];
-
       let history = [];
       try {
         history = JSON.parse(localStorage.getItem('gd_history') || '[]');
       } catch(e) {}
-      if (!history.length) history = defaultSessions;
 
       const grid = document.getElementById('historyGrid');
+      if (!history.length) {
+        grid.innerHTML = `
+          <div class="text-center py-12 card bg-white border border-stone-200">
+            <p class="text-xs text-stone-500 mb-3">No completed practice sessions recorded yet.</p>
+            <a href="/pages/mode-select.html" class="btn-primary text-xs py-2 px-5 inline-block">Start Your First Session</a>
+          </div>
+        `;
+        return;
+      }
       grid.innerHTML = history.map(s => `
         <div class="card bg-white !p-4 border border-[rgba(38,57,90,0.16)] flex items-center justify-between hover:border-[#f99d72] cursor-pointer" onclick="window.location.href='/pages/report.html?id=${s.id}'">
           <div class="space-y-1">
