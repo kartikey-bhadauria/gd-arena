@@ -7,7 +7,14 @@ import uuid
 import asyncio
 import urllib.request
 import urllib.parse
+import ssl
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
+
+# Configure resilient SSL context for dev/proxy environments
+try:
+    ssl._create_default_https_context = ssl._create_unverified_context
+except Exception:
+    pass
 
 try:
     import edge_tts
@@ -58,12 +65,6 @@ class GDArenaServerHandler(SimpleHTTPRequestHandler):
     def handle(self):
         try:
             super().handle()
-        except (ConnectionResetError, BrokenPipeError, ConnectionAbortedError):
-            pass
-
-    def copyfile(self, source, outputfile):
-        try:
-            super().copyfile(source, outputfile)
         except (ConnectionResetError, BrokenPipeError, ConnectionAbortedError):
             pass
 
