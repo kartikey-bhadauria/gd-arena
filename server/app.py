@@ -539,7 +539,10 @@ def serve_static(path):
             elif path.endswith('.png'): ct = 'image/png'
             elif path.endswith('.ico'): ct = 'image/x-icon'
             elif path.endswith('.json'): ct = 'application/json'
-            return Response(asset['content'], mimetype=ct)
+            data = asset['content']
+            if isinstance(data, str):
+                data = data.encode('utf-8', errors='ignore')
+            return Response(data, mimetype=ct)
         else:
             data = base64.b64decode(asset['content'])
             ct = 'image/png' if path.endswith('.png') else 'image/x-icon'
@@ -547,10 +550,16 @@ def serve_static(path):
             
     if f"{path}/index.html" in STATIC_ASSETS:
         asset = STATIC_ASSETS[f"{path}/index.html"]
-        return Response(asset['content'], mimetype='text/html')
+        data = asset['content']
+        if isinstance(data, str):
+            data = data.encode('utf-8', errors='ignore')
+        return Response(data, mimetype='text/html')
         
     if 'index.html' in STATIC_ASSETS:
         asset = STATIC_ASSETS['index.html']
-        return Response(asset['content'], mimetype='text/html')
+        data = asset['content']
+        if isinstance(data, str):
+            data = data.encode('utf-8', errors='ignore')
+        return Response(data, mimetype='text/html')
         
     return "Not Found", 404
