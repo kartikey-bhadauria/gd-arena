@@ -7,7 +7,8 @@ export const speakerLock = {
   active: false,
   currentSpeaker: null,
   isStudent: false,
-  queue: []
+  queue: [],
+  lockTimer: null
 };
 
 let audioContextUnlocked = false;
@@ -125,6 +126,14 @@ export class TTS {
     this.playing = true;
     this.onStart(speaker);
 
+    if (speakerLock.lockTimer) clearTimeout(speakerLock.lockTimer);
+    speakerLock.lockTimer = setTimeout(() => {
+      if (speakerLock.active && speakerLock.currentSpeaker === speaker) {
+        console.warn(`[VoiceRule] Lock timeout forced release for ${speaker}`);
+        this.handlePlaybackComplete(speaker);
+      }
+    }, 15000); // 15s safety timeout
+
     const engine = localStorage.getItem('gd_tts_engine') || 'edge';
     const voiceChoice = localStorage.getItem('gd_voice_choice') || 'voice1';
 
@@ -173,8 +182,17 @@ export class TTS {
   }
 
   handlePlaybackComplete(speaker) {
+    console.log(`[TTS] Playback complete for speaker: ${speaker}`);
+    if (speakerLock.lockTimer) {
+      clearTimeout(speakerLock.lockTimer);
+      speakerLock.lockTimer = null;
+    }
     this.playing = false;
-    this.currentAudio = null;
+    if (this.currentAudio) {
+      this.currentAudio.onended = null;
+      this.currentAudio.onerror = null;
+      this.currentAudio = null;
+    }
     speakerLock.active = false;
     speakerLock.currentSpeaker = null;
     this.onEnd(speaker);

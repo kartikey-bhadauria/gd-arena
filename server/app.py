@@ -442,13 +442,13 @@ def tts():
             except Exception as e_edge:
                 print(f"Edge-TTS notice: {e_edge}")
 
-        if not audio_bytes:
-            audio_bytes = silent_mp3
+        if not audio_bytes or len(audio_bytes) < 200:
+            return Response("TTS failed", status=503)
 
         return Response(audio_bytes, mimetype='audio/mpeg', headers={'Content-Length': str(len(audio_bytes))})
     except Exception as ex:
         print(f"TTS endpoint error: {ex}")
-        return Response(silent_mp3, mimetype='audio/mpeg', headers={'Content-Length': str(len(silent_mp3))})
+        return Response("TTS failed", status=503)
 
 # 6. Report endpoint
 @app.route('/api/report', methods=['POST'])
