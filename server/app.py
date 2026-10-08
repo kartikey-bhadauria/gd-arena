@@ -232,16 +232,13 @@ def add_cors(response):
     return response
 
 # 1. Health endpoint
-@app.route('/api/health', methods=['GET'])
-@app.route('/health', methods=['GET'])
-def health():
+@app.route('/api/debug-dir', methods=['GET'])
+def debug_dir():
     return jsonify({
-        "ok": True,
-        "gemini": bool(GOOGLE_KEY),
-        "groq": bool(GROQ_KEY),
-        "openrouter": bool(OPENROUTER_KEY),
-        "edge_tts": HAS_EDGE_TTS,
-        "timestamp": time.time()
+        "DIRECTORY": DIRECTORY,
+        "exists": os.path.exists(DIRECTORY),
+        "files": os.listdir(DIRECTORY) if os.path.exists(DIRECTORY) else [],
+        "project_root": PROJECT_ROOT
     })
 
 # 2. Session start endpoint
