@@ -82,28 +82,14 @@ python server.py
 
 ---
 
-## 📸 Interface Screenshots
+## 📸 Interface Screenshot
 
 <div align="center">
 
 ### 🌟 Landing & Mode Selection
-*Sleek, high-impact dark/light interface designed for peak focus.*
-<br><br>
+*Sleek, high-impact dark/light interface designed for peak focus.*\
+<br>
 <img src="docs/screenshots/landing.png" width="850px" alt="Landing Page">
-
-<br><br>
-
-### ⚡ Active Group Discussion Room
-*Real-time AI persona debate, voice VU meter, and live transcript stream.*
-<br><br>
-<img src="docs/screenshots/gd-room.png" width="850px" alt="GD Room">
-
-<br><br>
-
-### 📊 Quote-Verified Performance Report
-*Granular feedback with exact transcript quotes, timestamps, and actionable rebuttals.*
-<br><br>
-<img src="docs/screenshots/report.png" width="850px" alt="Performance Report">
 
 </div>
 
