@@ -99,20 +99,16 @@
     });
 
     elementsToReveal.forEach((el, index) => {
-      // Alternate direction between reveal-up and reveal-down unless explicitly set
-      if (!el.classList.contains('reveal-left') && !el.classList.contains('reveal-right') && !el.classList.contains('reveal-scale') && !el.classList.contains('reveal-down') && !el.classList.contains('reveal-up')) {
-        if (index % 2 === 0) {
-          el.classList.add('reveal-up');
-        } else {
-          el.classList.add('reveal-down');
-        }
+      // Clean, elegant upward reveal for all content
+      if (!el.classList.contains('reveal-left') && !el.classList.contains('reveal-right') && !el.classList.contains('reveal-scale') && !el.classList.contains('reveal-up')) {
+        el.classList.add('reveal-up');
       }
 
-      // If parent has grid or flex, add incremental transition-delay for smooth wave stagger
+      // Smooth subtle stagger for cards in grids
       const parent = el.parentElement;
       if (parent && (parent.classList.contains('grid') || parent.classList.contains('stagger-container'))) {
         const siblingIndex = Array.from(parent.children).indexOf(el);
-        el.style.transitionDelay = `${(siblingIndex % 6) * 90}ms`;
+        el.style.transitionDelay = `${(siblingIndex % 4) * 60}ms`;
       }
 
       observer.observe(el);
@@ -153,10 +149,59 @@
     requestAnimationFrame(update);
   }
 
+  // 6. Text Word-by-Word Split and Reveal Engine
+  function setupTextWordReveals() {
+    const textElements = document.querySelectorAll('.text-reveal-words, .hero-headline');
+    textElements.forEach(el => {
+      // Don't re-split if already split
+      if (el.querySelector('.word-span')) return;
+
+      const words = el.innerText.trim().split(/\s+/);
+      el.innerHTML = words.map((word, i) => {
+        return `<span class="word-span" style="transition-delay: ${i * 45}ms">${word} </span>`;
+      }).join('');
+    });
+
+    // Also initialize hero text rotator if present
+    setupHeroTextRotator();
+  }
+
+  // 7. Dynamic Hero Subtitle Text Rotator
+  function setupHeroTextRotator() {
+    const rotator = document.getElementById('heroRotatingText');
+    if (!rotator) return;
+
+    const phrases = [
+      "Group Discussions",
+      "Technical 1-on-1 Interviews",
+      "Instant Speech Barge-In",
+      "Campus Placement Rounds"
+    ];
+
+    let currentIdx = 0;
+    setInterval(() => {
+      rotator.classList.add('swap-out');
+      setTimeout(() => {
+        currentIdx = (currentIdx + 1) % phrases.length;
+        rotator.textContent = phrases[currentIdx];
+        rotator.classList.remove('swap-out');
+        rotator.classList.add('swap-in');
+        setTimeout(() => {
+          rotator.classList.remove('swap-in');
+        }, 50);
+      }, 350);
+    }, 3200);
+  }
+
   // Initialize Engine
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setupScrollReveals);
-  } else {
+  function initEngine() {
+    setupTextWordReveals();
     setupScrollReveals();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initEngine);
+  } else {
+    initEngine();
   }
 })();

@@ -469,4 +469,131 @@ header.header-scrolled {
   transform: translate(0, 0) scale(1);
 }
 
+/* ==========================================================
+   ADVANCED TYPOGRAPHY & TEXT ANIMATIONS
+   ========================================================== */
+
+/* 1. Shifting Gradient Animated Text */
+.text-gradient-animated {
+  background: linear-gradient(135deg, #f99d72 0%, #ea580c 25%, #2563eb 50%, #f99d72 75%, #ea580c 100%);
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientTextFlow 5s linear infinite;
+  display: inline-block;
+}
+
+.text-gradient-fire {
+  background: linear-gradient(135deg, #f99d72 0%, #ea580c 45%, #dc2626 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.text-gradient-ice {
+  background: linear-gradient(135deg, #38bdf8 0%, #2563eb 60%, #1d4ed8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+@keyframes gradientTextFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* 2. Text Shimmer Specular Light Wave */
+.text-shimmer {
+  position: relative;
+  display: inline-block;
+  background: linear-gradient(90deg, currentColor 0%, #f99d72 50%, currentColor 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  animation: textShimmer 3.5s infinite;
+}
+
+@keyframes textShimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+/* 3. Staggered Word / Character Reveal */
+.word-span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(14px) rotate(0.6deg);
+  filter: blur(3px);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform, filter;
+  white-space: pre;
+}
+
+.revealed .word-span,
+.word-span.visible {
+  opacity: 1;
+  transform: translateY(0) rotate(0deg);
+  filter: blur(0);
+}
+
+/* 4. Live Streaming Word Animation (Transcript Captions) */
+.stream-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(6px) scale(0.96);
+  animation: streamWordIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  white-space: pre-wrap;
+}
+
+@keyframes streamWordIn {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* 5. Interactive Text Hover Lift */
+.text-hover-lift {
+  display: inline-block;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease, text-shadow 0.25s ease;
+}
+
+.text-hover-lift:hover {
+  transform: translateY(-2px) scale(1.02);
+  color: #ea580c;
+  text-shadow: 0 4px 12px rgba(249, 157, 114, 0.25);
+}
+
+/* 6. Dynamic Hero Text Rotator */
+.text-rotator-word {
+  display: inline-block;
+  position: relative;
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.text-rotator-word.swap-out {
+  opacity: 0;
+  transform: translateY(-12px);
+}
+
+.text-rotator-word.swap-in {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+
 

@@ -117,12 +117,11 @@
     });
   }
 
-  // 3D Card Tilt & Dynamic Glare Effect
+  // 3D Card Subtle Physics & Glare Effect (Tamed & Damped)
   function setupCardTilt() {
-    const cards = document.querySelectorAll('.card, .card-surface, .interactive-tilt, .dashboard-mockup, .persona-card');
+    const cards = document.querySelectorAll('.card, .card-surface, .interactive-tilt, .persona-card');
 
     cards.forEach((card) => {
-      // Ensure relative positioning for glare overlay
       if (getComputedStyle(card).position === 'static') {
         card.style.position = 'relative';
       }
@@ -134,6 +133,8 @@
         card.appendChild(glare);
       }
 
+      card.style.transition = 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease';
+
       card.addEventListener('mousemove', (e) => {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -142,28 +143,29 @@
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
 
-        const rotateX = ((y - centerY) / centerY) * -6; // max 6deg tilt
-        const rotateY = ((x - centerX) / centerX) * 6;
+        // Subtle gentle micro-tilt (max 1.8deg)
+        const rotateX = ((y - centerY) / centerY) * -1.8;
+        const rotateY = ((x - centerX) / centerX) * 1.8;
 
-        card.style.transform = `perspective(800px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-2px)`;
+        card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-3px)`;
 
-        // Position glare
+        // Soft, subtle glare
         const glareX = (x / rect.width) * 100;
         const glareY = (y / rect.height) * 100;
-        glare.style.background = `radial-gradient(circle 200px at ${glareX}% ${glareY}%, rgba(249, 157, 114, 0.15), transparent 70%)`;
+        glare.style.background = `radial-gradient(circle 220px at ${glareX}% ${glareY}%, rgba(249, 157, 114, 0.08), transparent 70%)`;
         glare.style.opacity = '1';
       });
 
       card.addEventListener('mouseleave', () => {
-        card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) translateY(0)';
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)';
         glare.style.opacity = '0';
       });
     });
   }
 
-  // Magnetic Button Attraction Effect
+  // Magnetic Button Attraction Effect (Subtle Damping)
   function setupMagneticButtons() {
-    const magnetics = document.querySelectorAll('.btn-primary, .btn-secondary, .magnetic-btn, .pill-interactive');
+    const magnetics = document.querySelectorAll('.btn-primary, .btn-secondary, .magnetic-btn');
 
     magnetics.forEach((btn) => {
       btn.addEventListener('mousemove', (e) => {
@@ -171,16 +173,16 @@
         const x = e.clientX - rect.left - rect.width / 2;
         const y = e.clientY - rect.top - rect.height / 2;
 
-        // Pull button slightly towards cursor
-        btn.style.transform = `translate3d(${x * 0.22}px, ${y * 0.22}px, 0)`;
+        // Gentle subtle attraction
+        btn.style.transform = `translate3d(${x * 0.08}px, ${y * 0.08}px, 0)`;
       });
 
       btn.addEventListener('mouseleave', () => {
         btn.style.transform = 'translate3d(0, 0, 0)';
-        btn.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
+        btn.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
         setTimeout(() => {
           btn.style.transition = '';
-        }, 400);
+        }, 300);
       });
     });
   }

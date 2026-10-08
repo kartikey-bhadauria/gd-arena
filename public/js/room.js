@@ -288,13 +288,20 @@ export class RoomController {
 
     const persona = PERSONAS[speakerKey] || { color: '#1a1814' };
     const div = document.createElement('div');
-    div.className = "p-2 rounded bg-stone-50 border border-stone-100 text-xs leading-relaxed";
+    div.className = "p-2.5 rounded-lg bg-stone-50 border border-stone-100 text-xs leading-relaxed transition-all duration-300 shadow-sm";
+
+    // Split speech into animated streaming words
+    const words = text.split(/\s+/);
+    const animatedWordsHtml = words.map((w, idx) => {
+      return `<span class="stream-word" style="animation-delay: ${idx * 25}ms">${w} </span>`;
+    }).join('');
+
     div.innerHTML = `
       <div class="flex items-center gap-2 mb-0.5">
         <span class="font-mono text-[10px] text-stone-400">[${ts}]</span>
         <span class="font-bold text-[11px]" style="color: ${persona.color}">${name}:</span>
       </div>
-      <p class="text-stone-800">${text}</p>
+      <p class="text-stone-800 leading-normal">${animatedWordsHtml}</p>
     `;
     feed.appendChild(div);
     feed.scrollTop = feed.scrollHeight;
