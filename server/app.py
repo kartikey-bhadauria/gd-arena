@@ -526,6 +526,7 @@ def generate_topics():
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve_static(path):
+    print(f"DEBUG REQUEST PATH: {path}")
     if not path or path == '/':
         path = 'index.html'
     
