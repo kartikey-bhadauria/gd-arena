@@ -10,6 +10,40 @@ export const speakerLock = {
   queue: []
 };
 
+let audioContextUnlocked = false;
+let globalPendingAudio = null;
+
+export function unlockAudioContext() {
+  if (audioContextUnlocked && !globalPendingAudio) return;
+  audioContextUnlocked = true;
+
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (AudioCtx) {
+      const ctx = new AudioCtx();
+      ctx.resume().then(() => ctx.close()).catch(() => {});
+    }
+  } catch (e) {}
+
+  if (globalPendingAudio) {
+    try {
+      globalPendingAudio.play().catch(e => console.warn('[TTS] Delayed audio play note:', e));
+    } catch (e) {}
+    globalPendingAudio = null;
+
+    const banner = document.getElementById('audioUnlockBanner');
+    if (banner) banner.classList.add('hidden');
+  }
+}
+
+// Auto-register touch/click unblockers
+if (typeof window !== 'undefined') {
+  window.unlockAudioContext = unlockAudioContext;
+  ['click', 'touchstart', 'keydown', 'pointerdown'].forEach(evt => {
+    window.addEventListener(evt, unlockAudioContext, { passive: true });
+  });
+}
+
 export class TTS {
   constructor({ onStart, onEnd } = {}) {
     this.onStart = onStart || (() => {});
@@ -117,8 +151,18 @@ export class TTS {
           this.handlePlaybackComplete(speaker);
         };
 
-        await audio.play();
-        return;
+        try {
+          await audio.play();
+          return;
+        } catch (playErr) {
+          console.warn('[TTS] Autoplay blocked by browser policy. Storing audio for first user gesture:', playErr);
+          globalPendingAudio = audio;
+
+          // Reveal top banner in room if user needs visual cue
+          const banner = document.getElementById('audioUnlockBanner');
+          if (banner) banner.classList.remove('hidden');
+          return;
+        }
       }
     } catch (err) {
       console.warn('TTS streaming failed, falling back to Web Speech Synthesis:', err);

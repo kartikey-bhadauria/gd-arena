@@ -45,6 +45,10 @@ export class RoomController {
       }
     });
     window.openResumeModal = () => this.resumeModal.show();
+    window.passTurnToNext = () => this.passTurnToNext();
+    window.unlockRoomAudio = () => {
+      import('./tts.js').then(m => m.unlockAudioContext());
+    };
   }
 
   async init() {
@@ -83,6 +87,12 @@ export class RoomController {
     const intBtn = document.getElementById('interruptBtn');
     if (intBtn) {
       intBtn.addEventListener('click', () => this.handleStudentBargeIn(true));
+    }
+
+    // Pass turn button
+    const passBtn = document.getElementById('passTurnBtn');
+    if (passBtn) {
+      passBtn.addEventListener('click', () => this.passTurnToNext());
     }
 
     // End session button
@@ -229,6 +239,21 @@ export class RoomController {
     }, SESSION.reactionDelay);
   }
 
+
+  async passTurnToNext() {
+    if (this.turnManager.isProcessing) return;
+
+    const passBtn = document.getElementById('passTurnBtn');
+    if (passBtn) {
+      passBtn.classList.add('opacity-75', 'scale-95');
+      setTimeout(() => passBtn.classList.remove('opacity-75', 'scale-95'), 300);
+    }
+
+    this.tts.stop(false);
+    this.showNotice("Turn passed to next participant →");
+
+    await this.handleFinalSpeech("[Passes floor to next speaker / invites next argument]");
+  }
 
   updateFluencyUI(stats) {
     const paceEl = document.getElementById('livePaceBadge');

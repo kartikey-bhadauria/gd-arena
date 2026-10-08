@@ -50,6 +50,20 @@
     </div>
   </header>
 
+  <!-- Audio Unlock Banner for Browser Autoplay Restrictions -->
+  <div id="audioUnlockBanner" class="hidden bg-gradient-to-r from-orange-500 to-amber-500 text-white px-4 py-2.5 shadow-md">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-2 text-xs font-semibold">
+        <i data-lucide="volume-2" class="w-4 h-4 animate-bounce"></i>
+        <span>Browser audio needs 1 click to activate. Click Enable to hear Ms. Kapoor's opening question!</span>
+      </div>
+      <button onclick="unlockRoomAudio()" class="px-3.5 py-1 rounded-full bg-white text-stone-900 font-bold text-xs shadow hover:bg-stone-100 flex items-center gap-1.5 transition-all">
+        <i data-lucide="play" class="w-3.5 h-3.5 text-orange-600 fill-orange-600"></i>
+        <span>Enable Audio Voice</span>
+      </button>
+    </div>
+  </div>
+
   <!-- Main Room Layout -->
   <main class="max-w-7xl mx-auto px-4 py-6 w-full flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
     
@@ -143,15 +157,25 @@
         <span class="font-semibold text-stone-700">Interview Mode:</span> Voice barge-in active
       </div>
 
-      <!-- Large Center Mic Button -->
-      <div class="flex items-center gap-4">
+      <!-- Center Controls -->
+      <div class="flex items-center gap-3">
+        <button id="interruptBtn" class="btn-secondary !text-xs !py-2 !px-3.5 !bg-amber-50 !text-amber-800 !border-amber-200 hover:!bg-amber-100">
+          <i data-lucide="hand" class="w-3.5 h-3.5"></i>
+          <span>Interrupt Evaluator</span>
+        </button>
+
         <button id="micToggleBtn" class="w-14 h-14 rounded-full bg-[#f99d72] text-[#1a1814] flex items-center justify-center shadow-lg hover:scale-105 transition-all">
           <i data-lucide="mic" class="w-6 h-6"></i>
+        </button>
+
+        <button id="passTurnBtn" class="btn-secondary !text-xs !py-2 !px-3.5 !bg-blue-50 !text-blue-800 !border-blue-200 hover:!bg-blue-100">
+          <i data-lucide="skip-forward" class="w-3.5 h-3.5 text-blue-600"></i>
+          <span>Next Question →</span>
         </button>
       </div>
 
       <div class="flex items-center gap-2">
-        <span class="text-[10px] text-stone-400">Press Mic to Speak / Stop</span>
+        <span class="text-[10px] text-stone-400">Speak or Pass to proceed</span>
       </div>
     </div>
   </footer>
