@@ -234,10 +234,15 @@ def add_cors(response):
 # 1. Health endpoint
 @app.route('/api/debug-dir', methods=['GET'])
 def debug_dir():
+    root_contents = []
+    try:
+        root_contents = os.listdir('/var/task')
+    except Exception as e:
+        root_contents = [str(e)]
     return jsonify({
         "DIRECTORY": DIRECTORY,
         "exists": os.path.exists(DIRECTORY),
-        "files": os.listdir(DIRECTORY) if os.path.exists(DIRECTORY) else [],
+        "root_contents": root_contents,
         "project_root": PROJECT_ROOT
     })
 
