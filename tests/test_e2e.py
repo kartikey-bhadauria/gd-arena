@@ -3,7 +3,7 @@ import urllib.parse
 import json
 import time
 
-BASE_URL = "http://localhost:8000"
+BASE_URL = "https://gd-arena-phi.vercel.app"
 
 def test_get(path, expected_status=200):
     url = f"{BASE_URL}{path}"

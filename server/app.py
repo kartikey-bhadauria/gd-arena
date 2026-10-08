@@ -248,6 +248,17 @@ def add_cors(response):
     return response
 
 # 1. Health endpoint
+@app.route('/api/health', methods=['GET'])
+@app.route('/health', methods=['GET'])
+def health():
+    return jsonify({
+        "ok": True,
+        "gemini": bool(GOOGLE_KEY),
+        "groq": bool(GROQ_KEY),
+        "openrouter": bool(OPENROUTER_KEY),
+        "edge_tts": HAS_EDGE_TTS
+    })
+
 @app.route('/api/debug-dir', methods=['GET'])
 def debug_dir():
     server_contents = []
@@ -536,6 +547,7 @@ def generate_topics():
 
 # 9. Standard Flask Template and Static Routing
 @app.route('/')
+@app.route('/index.html')
 def index():
     return render_template('index.html')
 
@@ -574,3 +586,7 @@ def favicon():
         if os.path.exists(os.path.join(d, 'favicon.ico')):
             return send_from_directory(d, 'favicon.ico')
     return send_from_directory(STATIC_DIR, 'favicon.ico')
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8000, debug=True)
+
