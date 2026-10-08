@@ -1,12 +1,13 @@
 <div align="center">
 
-# ⚡ GD ARENA ⚡
+## ⚡ GD ARENA ⚡
 ### *The Ultimate Voice-First AI Placement Simulator*
 > **"Walk into your next Group Discussion & Tech Interview already feared and ready."**
 
 [![GitHub Stars](https://img.shields.io/github/stars/kartikey-bhadauria/gd-arena?style=for-the-badge&color=blueviolet)](https://github.com/kartikey-bhadauria/gd-arena/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/kartikey-bhadauria/gd-arena?style=for-the-badge&color=cyan)](https://github.com/kartikey-bhadauria/gd-arena/network)
 [![License](https://img.shields.io/github/license/kartikey-bhadauria/gd-arena?style=for-the-badge&color=green)](LICENSE)
+[![Vercel Deployment](https://img.shields.io/badge/Vercel-Live%20Deployment-black?style=for-the-badge&logo=vercel)](https://gd-arena-phi.vercel.app)
 [![Contributors](https://img.shields.io/github/contributors/kartikey-bhadauria/gd-arena?style=for-the-badge&color=orange)](https://github.com/kartikey-bhadauria/gd-arena/graphs/contributors)
 
 [Features](#-features) • [Architecture](#️-architecture) • [Quick Start](#-quick-start) • [Personas](#-meet-the-ai-cast) • [Scoring Engine](#-how-scoring-works)
