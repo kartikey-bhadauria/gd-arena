@@ -16,11 +16,50 @@
 
 ---
 
-## 🔥 What is GD Arena?
+## 🔥 What it does (Problem Statement 2)
+**GD Arena** is a zero-cost, voice-first simulation platform engineered for engineering students to master campus placement Group Discussions (GD) and technical mock interviews against multi-agent AI opponents. 
 
-**GD Arena** is an elite, zero-cost, voice-first AI simulation platform built for engineering students and high-performers to master campus placement Group Discussions (GD) and 1-on-1 technical mock interviews. 
+Under **Problem Statement 2**, GD Arena implements:
+- **Configurable Room Setup**: Custom topics and selectable panel sizing (3, 4, or 5 AI participants).
+- **AI-to-AI Discussion Loop**: Moderator opening $
+ightarrow$ AI participant response to student $
+ightarrow$ Second AI participant responding directly to the first AI's point (inter-agent debate with controlled latency).
+- **Voice & Fallback Resilience**: Real-time Web Speech STT/TTS audio synthesis, mic permission fallback, and TTS failure handling.
+- **Quote-Verified Placement Scoring**: Strict, honest post-session report where every coaching point cites an exact timestamped transcript quote.
 
-Featuring realistic multi-agent AI personas with dynamic interruptions, real-time voice barge-in, STT/TTS neural synthesis, and quote-verified placement scoring — **GD Arena replicates real placement cell pressure with absolute precision.**
+---
+
+## 📋 Done / Left / Plan
+
+| Status | Component / Milestone | Details |
+| :---: | :--- | :--- |
+| ✅ **DONE** | Room Setup & Panel Sizing | Custom topic input and 3/4/5 participant panel selector wired end-to-end. |
+| ✅ **DONE** | AI-to-AI Discussion Loop | Multi-turn debate where AI personas refute each other and moderate on timer expiration. |
+| ✅ **DONE** | Voice & TTS Resilience | Web Speech API, audio barge-in, mic denial handling, and robust fallback synthesis. |
+| ✅ **DONE** | Quote-Linked Reporting | Placement report with exact transcript quotes, timestamps, word share, and turn counts. |
+| ✅ **DONE** | Vercel & GitHub Deployment | Live deployment on Vercel and production GitHub repository sync. |
+
+---
+
+## 🏗️ Architecture & Why
+```mermaid
+graph TD
+    A[User Voice / Mic] -->|Web Speech STT| B[Client Turn Manager]
+    B -->|HTTP / JSON| C[Python ThreadingHTTPServer]
+    C -->|Gemini Flash Lite / Groq| D[Multi-Agent Persona Engine]
+    D -->|AI-to-AI Rebuttal Loop| C
+    C -->|edge-tts Neural Audio| E[Audio Playback & VU Meter]
+    C -->|Transcript & Metrics| F[Quote-Verified Scoring Engine]
+    F -->|Detailed Breakdown| G[Candidate Report Dashboard]
+```
+**Why this architecture?** Python's standard `ThreadingHTTPServer` combined with Flask and server-sent/REST endpoints enables low-latency multi-agent orchestration without bulky WebSockets, while vanilla client-side Web Speech and Audio APIs provide seamless zero-cost speech synthesis and recognition.
+
+---
+
+## 🚀 What We Added
+- **Multi-Agent Inter-Agent Debates**: AI models now evaluate prior AI statements for logical fallacies and cross-examine each other before turning back to the candidate.
+- **Dynamic Panel Controls**: UI selectors for custom topics and panel counts (3-5 personas).
+- **Quote-Linked Scoring Engine**: Replaced generic heuristics with precise quote matching from session transcripts.
 
 ---
 
