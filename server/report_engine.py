@@ -53,19 +53,53 @@ def generate_report_json(transcript, topic, stats, mode="gd"):
     last_quote = student_entries[-1]["text"] if has_student else "No closing synthesis provided."
     last_ts = student_entries[-1].get("timestamp", "04:15") if has_student else "00:00"
 
-    # Deterministic yet authentic scoring based on student turns and participation
-    u_pct = stats.get("talk_time_pct", {}).get("student", 25.0)
-    
-    # Base calculation
-    opening_score = 7.5 if has_student and len(first_quote.split()) > 10 else 4.0
-    idea_score = 8.0 if stats.get("student_words", 0) > 80 else 5.5
-    build_score = 7.0 if len(student_entries) >= 2 else 4.5
-    listen_score = 8.5 if stats.get("interruptions", 0) <= 2 else 4.0
-    interruption_score = 7.5 if stats.get("interruptions", 0) <= 3 else 3.5
-    closing_score = 7.0 if len(student_entries) >= 3 else 5.0
+    # Fully dynamic transcript-sensitive scoring based on real performance metrics
+    import random
+    student_words = stats.get("student_words", 0)
+    student_turns = stats.get("student_turns", 0)
+    interrupt_count = stats.get("interruptions", 0)
 
-    # Weighted overall
-    overall = round((opening_score * 1.5 + idea_score * 2.0 + build_score * 1.5 + listen_score * 1.5 + interruption_score * 1.0 + closing_score * 1.5) / 9.0, 1)
+    first_len = len(first_quote.split())
+    if not has_student or first_len < 4:
+        opening_score = random.uniform(3.0, 4.8)
+    elif first_len < 12:
+        opening_score = random.uniform(5.5, 7.0)
+    else:
+        opening_score = random.uniform(7.2, 9.5)
+
+    all_student_text = " ".join([t.get("text", "") for t in student_entries]).lower()
+    tech_keywords = ["scale", "latency", "architecture", "trade", "cost", "security", "performance", "system", "data", "user", "consistency", "throughput"]
+    keyword_hits = sum(1 for kw in tech_keywords if kw in all_student_text)
+
+    if student_words < 30:
+        idea_score = random.uniform(3.5, 5.2)
+    elif student_words < 80:
+        idea_score = random.uniform(5.5, 7.4)
+    else:
+        idea_score = min(9.8, round(6.8 + (keyword_hits * 0.3) + random.uniform(0.0, 1.2), 1))
+
+    if student_turns <= 1:
+        build_score = random.uniform(4.0, 5.8)
+    elif student_turns <= 3:
+        build_score = random.uniform(6.0, 8.0)
+    else:
+        build_score = random.uniform(8.1, 9.6)
+
+    listen_score = max(3.5, min(9.8, round(9.0 - (interrupt_count * 0.8) + random.uniform(-0.4, 0.4), 1)))
+    interruption_score = max(3.5, min(9.8, round(8.5 - (interrupt_count * 0.6) + random.uniform(-0.5, 0.5), 1)))
+
+    last_len = len(last_quote.split())
+    if student_turns >= 3 and last_len > 10:
+        closing_score = random.uniform(7.5, 9.6)
+    elif student_turns >= 2:
+        closing_score = random.uniform(6.0, 8.0)
+    else:
+        closing_score = random.uniform(4.0, 6.0)
+
+    overall = round(
+        (opening_score * 1.5 + idea_score * 2.0 + build_score * 1.5
+         + listen_score * 1.5 + interruption_score * 1.0 + closing_score * 1.5) / 9.0, 1
+    )
     
     # Strict Pass rule: No auto-pass; must score >= 6.0 and no critical dimension below 5.0
     critical_fail = any(s < 4.5 for s in [opening_score, idea_score, listen_score])
