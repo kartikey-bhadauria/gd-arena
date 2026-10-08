@@ -111,6 +111,26 @@ def generate_report_json(transcript, topic, stats, mode="gd"):
     else:
         review_statement = f"Candidate did not meet the placement passing threshold for '{topic}'. Key improvement needed in substantive domain grounding, active structured listening, and avoiding evasive or off-topic responses."
 
+    # Dynamically find peer challenges for missed openings from real transcript
+    ai_challenges = [t for t in transcript if t.get("speaker") not in ["student", "user", "candidate", "system"] and ("?" in t.get("text", "") or "however" in t.get("text", "").lower() or "cost" in t.get("text", "").lower() or "evidence" in t.get("text", "").lower())]
+    
+    missed_openings = []
+    if ai_challenges:
+        ch = ai_challenges[0]
+        spk_name = ch.get('speaker', 'Peer').capitalize()
+        ch_text = ch.get('text', '')
+        missed_openings.append({
+            "ts": ch.get("timestamp", "02:15"),
+            "what_happened": f"{spk_name} raised a point on trade-offs: \"{ch_text[:80]}...\"",
+            "what_you_could_have_said": f"Acknowledge {spk_name}'s perspective on {topic} while defending architectural maintainability and reliability."
+        })
+    else:
+        missed_openings.append({
+            "ts": "01:45",
+            "what_happened": "Opportunity to anchor the discussion around verifiable trade-offs and quantitative metrics.",
+            "what_you_could_have_said": f"We need to balance {topic} with long-term engineering maintainability and p99 performance guarantees."
+        })
+
     return {
         "overall_score": overall,
         "tier": tier,
@@ -121,53 +141,47 @@ def generate_report_json(transcript, topic, stats, mode="gd"):
         "dimensions": {
             "opening": {
                 "score": opening_score,
-                "quote": f"[{first_ts}] \"{first_quote[:75]}...\"",
-                "comment": "Good initiation with structured stance, but could define scope faster."
+                "quote": f"[{first_ts}] \"{first_quote}\"",
+                "comment": "Good initiation with structured stance, establishing clear foundational scope." if first_len >= 4 else "Initial opening was brief; recommend more robust introductory framing."
             },
             "idea_quality": {
                 "score": idea_score,
-                "quote": f"[{first_ts}] \"{first_quote[:60]}...\"",
-                "comment": "Solid technical reasoning; supported claims with concrete architecture examples."
+                "quote": f"[{first_ts}] \"{first_quote}\"",
+                "comment": "Solid domain reasoning; supported arguments with relevant system design principles."
             },
             "building_on_others": {
                 "score": build_score,
-                "quote": f"[{last_ts}] \"{last_quote[:70]}...\"",
+                "quote": f"[{last_ts}] \"{last_quote}\"",
                 "comment": "Successfully referenced peer counter-arguments before presenting trade-off."
             },
             "listening": {
                 "score": listen_score,
-                "quote": f"[{first_ts}] Active listening demonstrated.",
-                "comment": "Maintained composure during aggressive refutations from Aarav."
+                "quote": f"[{first_ts}] Active listening demonstrated across session turns.",
+                "comment": "Maintained composure during active peer refutations."
             },
             "handling_interruptions": {
                 "score": interruption_score,
-                "quote": f"[{last_ts}] Recovered control without raising voice.",
+                "quote": f"[{last_ts}] Managed floor presence during active turn exchanges.",
                 "comment": f"Handled {stats.get('interruptions', 0)} conversational collisions with firm poise."
             },
             "closing": {
                 "score": closing_score,
-                "quote": f"[{last_ts}] \"{last_quote[:65]}...\"",
-                "comment": "Synthesized the group consensus clearly before the timer expired."
+                "quote": f"[{last_ts}] \"{last_quote}\"",
+                "comment": "Synthesized the group discussion consensus clearly before the timer expired."
             }
         },
         "strengths": [
-            f"Demonstrated composure when countered: \"{first_quote[:80]}\" (Clear, unapologetic defense).",
-            "Effective use of domain terminology without resorting to shallow buzzwords."
+            f"Demonstrated composure when countered: \"{first_quote[:75]}\" (Clear, unapologetic defense).",
+            "Effective use of domain terminology without relying on shallow buzzwords."
         ],
         "weaknesses": [
-            "Tendency to hesitate for 2+ seconds when challenged on database edge cases.",
-            "Could cite more quantitative benchmarks (e.g. p99 latency, cost per query) to shut down debates."
+            "Tendency to hesitate when challenged on deep system architecture edge cases.",
+            "Could cite more quantitative benchmarks (e.g. p99 latency, throughput) to solidify arguments."
         ],
         "red_flags": [
-            "Avoided direct eye contact / paused abruptly during Aarav's second rebuttal."
+            "Avoided direct engagement or paused abruptly during peer rebuttal."
         ] if overall < 6.5 else [],
-        "missed_openings": [
-            {
-                "ts": "02:18",
-                "what_happened": "Priya presented a flawed scalability assumption regarding stateless containers.",
-                "what_you_could_have_said": "Priya makes a valid point on compute scaling, but stateful database connections remain the bottleneck."
-            }
-        ],
+        "missed_openings": missed_openings,
         "drills": [
             "Drill 1: 30-second rapid counter-argument formulation under aggressive peer interruption.",
             "Drill 2: STAR method structure for high-concurrency failure mode questions.",
