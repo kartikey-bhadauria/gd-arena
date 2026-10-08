@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "public": "public",
   "builds": [
     {
       "src": "api/index.py",
@@ -11,13 +10,6 @@
     }
   ],
   "routes": [
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "api/index.py"
-    },
     {
       "src": "/(.*)",
       "dest": "api/index.py"
