@@ -51,11 +51,6 @@ export class RoomController {
     this.setupUI();
     this.startTimer();
 
-    // Auto-prompt Resume / CV check if not previously attached
-    if (!localStorage.getItem('gd_resume')) {
-      setTimeout(() => this.resumeModal.show(), 400);
-    }
-
     // Start session on backend
     const res = await startSession(this.mode, this.topic, 4);
     if (res) {

@@ -1,29 +1,61 @@
-// Resume Upload and Parsing Client
+// Resume Upload and Target Mode Forwarding Client
 
 import { parseResume } from './api.js';
+
+let targetMode = 'interview';
 
 document.addEventListener('DOMContentLoaded', () => {
   if (window.lucide) {
     window.lucide.createIcons();
   }
 
-  // Prepopulate sample resume text for rapid testing
-  const sampleResume = `Kartikey Bhadauria
-B.Tech Computer Science & Engineering (2026) | CGPA: 8.4
-Skills: Python, JavaScript, React, FastAPI, Node.js, Docker, SQL, Git, Machine Learning, Web Speech API
+  // Parse URL parameters for target next room
+  const params = new URLSearchParams(window.location.search);
+  const next = params.get('next');
+  if (next === 'gd' || next === 'interview') {
+    targetMode = next;
+  }
 
-Experience:
-- SDE Intern at AI Startup: Built low-latency multi-agent voice orchestration pipelines with sub-50ms audio streaming.
+  const badge = document.getElementById('targetModeBadge');
+  const heading = document.getElementById('resumeHeading');
+  const btnText = document.getElementById('proceedBtnText');
 
-Projects:
-- GD Arena: Voice-first AI group discussion simulator with speech barge-in and quote-verified scoring.
-- Cloud Scalability Benchmark: Distributed Redis caching engine handling 10,000 requests/sec.`;
+  if (targetMode === 'interview') {
+    if (badge) badge.textContent = "Placement Preparation: 1-on-1 Interview";
+    if (heading) heading.textContent = "Submit Resume for 1-on-1 Interview";
+    if (btnText) btnText.textContent = "Attach Resume & Enter Interview Room →";
+  } else if (targetMode === 'gd') {
+    const topic = localStorage.getItem('gd_selected_topic') || 'Should AI Replace Software Engineers?';
+    if (badge) badge.textContent = `Campus GD Preparation: ${topic.slice(0, 32)}...`;
+    if (heading) heading.textContent = "Submit Resume / Profile for Group Discussion";
+    if (btnText) btnText.textContent = "Attach Profile & Enter GD Room →";
+  }
 
+  // Check if resume is already in local storage or prepopulate sample
+  const existing = localStorage.getItem('gd_resume');
   const resumeInput = document.getElementById('resumeText');
+  if (existing && resumeInput) {
+    try {
+      const parsed = JSON.parse(existing);
+      if (parsed.raw_text) {
+        resumeInput.value = parsed.raw_text;
+      }
+    } catch(e) {}
+  }
+
   if (resumeInput && !resumeInput.value) {
-    resumeInput.value = sampleResume;
+    loadSampleResume();
   }
 });
+
+window.loadSampleResume = function() {
+  const sample = `Kartikey Bhadauria\nB.Tech Computer Science & Engineering (2026) | CGPA: 8.4\nSkills: Python, JavaScript, React, FastAPI, Node.js, Docker, SQL, Redis, REST APIs, Git, Machine Learning\n\nExperience:\n- SDE Intern at AI Startup: Built low-latency multi-agent voice orchestration pipelines with sub-50ms streaming.\n\nProjects:\n- GD Arena: Voice-first AI group discussion simulator with speech barge-in and quote-verified scoring.\n- Distributed Microservices Engine: High-throughput background worker pipeline with Redis and PostgreSQL sharding.`;
+
+  const resumeInput = document.getElementById('resumeText');
+  if (resumeInput) {
+    resumeInput.value = sample;
+  }
+};
 
 window.switchTab = function(tab) {
   const pasteSec = document.getElementById('pasteSection');
@@ -44,39 +76,37 @@ window.switchTab = function(tab) {
   }
 };
 
-window.handleParseResume = async function() {
-  const text = document.getElementById('resumeText').value;
-  const jdText = document.getElementById('jdText').value;
+window.handleParseAndProceed = async function() {
+  const text = document.getElementById('resumeText').value.trim();
+  const jdText = document.getElementById('jdText')?.value.trim() || '';
 
-  const res = await parseResume(text, jdText);
-  if (res) {
-    localStorage.setItem('gd_resume', JSON.stringify(res));
-    renderParsedCard(res);
+  if (text) {
+    const btn = document.getElementById('proceedBtnText');
+    if (btn) btn.textContent = "Parsing & Grounding Profile...";
+    
+    try {
+      const res = await parseResume(text, jdText);
+      if (res) {
+        res.raw_text = text;
+        localStorage.setItem('gd_resume', JSON.stringify(res));
+      }
+    } catch(e) {
+      localStorage.setItem('gd_resume', JSON.stringify({ raw_text: text, skills: ['Python', 'Problem Solving'] }));
+    }
   }
+
+  // Navigate straight to the selected room
+  navigateToTargetRoom();
 };
 
-function renderParsedCard(data) {
-  const card = document.getElementById('parsedCard');
-  card.classList.remove('hidden');
+window.skipAndProceed = function() {
+  navigateToTargetRoom();
+};
 
-  // Skills chips
-  const chipsContainer = document.getElementById('skillsChips');
-  chipsContainer.innerHTML = (data.skills || []).map(s => `
-    <span class="px-2 py-0.5 rounded-full bg-stone-100 border border-stone-200 text-[11px] font-medium text-stone-800">${s}</span>
-  `).join('');
-
-  // Projects list
-  const projList = document.getElementById('projectsList');
-  if (data.projects && data.projects.length > 0) {
-    projList.innerHTML = data.projects.map(p => `<li>${p}</li>`).join('');
+function navigateToTargetRoom() {
+  if (targetMode === 'gd') {
+    window.location.href = '/pages/gd-room.html';
   } else {
-    projList.innerHTML = `<li>Full Stack Distributed Web System</li>`;
+    window.location.href = '/pages/interview-room.html';
   }
-
-  // JD Match
-  if (data.jd_match) {
-    document.getElementById('jdScoreVal').textContent = `${data.jd_match.score}%`;
-  }
-
-  card.scrollIntoView({ behavior: 'smooth' });
 }

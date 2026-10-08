@@ -11,13 +11,13 @@
 <body class="bg-[#fafaf9] min-h-screen text-[#1a1814] flex flex-col justify-between">
 
   <!-- Header -->
-  <header class="bg-white border-b border-[rgba(38,57,90,0.1)] py-4">
+  <header class="bg-white border-b border-[rgba(38,57,90,0.1)] py-4 sticky top-0 z-20">
     <div class="max-w-5xl mx-auto px-4 flex items-center justify-between">
-      <a href="/" class="flex items-center gap-2">
-        <div class="w-7 h-7 rounded-full bg-[#f99d72] flex items-center justify-center font-bold text-[#1a1814] text-xs">GD</div>
-        <span class="font-bold text-base tracking-tight text-[#1a1814]">GD Arena</span>
+      <a href="/pages/mode-select.html" class="flex items-center gap-2 text-stone-600 hover:text-stone-900 text-xs font-semibold">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        <span>Back to Mode Selection</span>
       </a>
-      <span class="text-xs text-stone-500">1-on-1 Interview Resume Tailoring</span>
+      <span id="targetModeBadge" class="text-xs font-mono px-2.5 py-0.5 rounded-full bg-orange-50 text-orange-700 border border-orange-200">Session Setup: Resume Verification</span>
     </div>
   </header>
 
@@ -26,17 +26,23 @@
     <div class="max-w-2xl mx-auto space-y-6">
       
       <div class="text-center space-y-2">
-        <h2 class="text-2xl font-bold tracking-tight text-[#1a1814]">Upload your resume</h2>
-        <p class="text-xs text-stone-500">The AI interviewer (Ms. Kapoor) uses your actual projects to generate sharp technical questions.</p>
+        <h2 id="resumeHeading" class="text-2xl font-bold tracking-tight text-[#1a1814]">Submit your Resume / CV</h2>
+        <p class="text-xs text-stone-500">The AI interviewer and panel tailor technical depth and arguments to your actual projects.</p>
       </div>
 
       <!-- Drag & Drop Zone / Paste Area -->
       <div class="card bg-white !p-6 space-y-4">
         
-        <!-- Toggle Buttons -->
-        <div class="flex items-center gap-2 pb-2 border-b border-stone-100 text-xs">
-          <button id="tabPaste" onclick="switchTab('paste')" class="font-bold text-[#1a1814] border-b-2 border-[#f99d72] pb-1">Paste Resume Text</button>
-          <button id="tabFile" onclick="switchTab('file')" class="text-stone-400 pb-1 hover:text-stone-700">Upload File (.txt / .pdf)</button>
+        <!-- Toggle Buttons & 1-Click Sample -->
+        <div class="flex items-center justify-between pb-2 border-b border-stone-100 text-xs">
+          <div class="flex items-center gap-3">
+            <button id="tabPaste" onclick="switchTab('paste')" class="font-bold text-[#1a1814] border-b-2 border-[#f99d72] pb-1">Paste Resume Text</button>
+            <button id="tabFile" onclick="switchTab('file')" class="text-stone-400 pb-1 hover:text-stone-700">Upload File (.txt / .pdf)</button>
+          </div>
+          <button onclick="loadSampleResume()" class="text-emerald-700 hover:text-emerald-900 font-semibold text-[11px] flex items-center gap-1">
+            <i data-lucide="zap" class="w-3.5 h-3.5 text-emerald-600"></i>
+            <span>Fill Sample SDE CV</span>
+          </button>
         </div>
 
         <!-- Paste Text Mode -->
@@ -53,14 +59,21 @@
 
         <!-- Optional Job Description Textarea -->
         <div class="pt-2">
-          <label class="block font-medium text-xs text-stone-700 mb-1">Target Job Description (Optional for JD Match Score)</label>
-          <textarea id="jdText" rows="3" placeholder="Paste target company JD / requirements (e.g. SDE Backend, React, FastAPI, System Design)..." class="w-full p-2.5 rounded-lg border border-stone-200 text-xs font-mono focus:ring-2 focus:ring-[#f99d72] focus:outline-none"></textarea>
+          <label class="block font-medium text-xs text-stone-700 mb-1">Target Job Description (Optional for Alignment Score)</label>
+          <textarea id="jdText" rows="2" placeholder="Paste target company requirements (e.g. SDE Backend, React, FastAPI, System Design)..." class="w-full p-2.5 rounded-lg border border-stone-200 text-xs font-mono focus:ring-2 focus:ring-[#f99d72] focus:outline-none"></textarea>
         </div>
 
-        <button onclick="handleParseResume()" class="btn-primary w-full !py-2.5 !text-xs !justify-center">
-          <i data-lucide="sparkles" class="w-4 h-4"></i>
-          <span>Parse Resume & Calculate Alignment</span>
-        </button>
+        <!-- Primary Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-center gap-3 pt-2">
+          <button onclick="handleParseAndProceed()" class="btn-primary w-full !py-3 !text-xs !justify-center shadow-md flex-1">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span id="proceedBtnText">Attach Resume & Enter Room →</span>
+          </button>
+          
+          <button onclick="skipAndProceed()" class="btn-secondary w-full sm:w-auto !py-3 !px-4 !text-xs !justify-center text-stone-600">
+            <span>Skip / Default Profile</span>
+          </button>
+        </div>
       </div>
 
       <!-- Parsed Output Card (Hidden initially) -->
