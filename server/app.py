@@ -11,7 +11,7 @@ import ssl
 import re
 import tempfile
 import base64
-from flask import Flask, request, jsonify, Response, send_from_directory
+from flask import Flask, request, jsonify, Response, send_from_directory, render_template
 from server.static_assets import STATIC_ASSETS
 
 # Ensure project root is on sys.path
@@ -215,8 +215,15 @@ Respond as {persona['name']} in 1-2 spoken sentences (under 35 words). Be direct
     }
     return fallbacks.get(persona["name"].lower(), "Let us analyze the trade-offs before drawing a conclusion.")
 
-# Initialize Flask App
-app = Flask(__name__, static_folder=DIRECTORY, static_url_path='')
+# Initialize Flask App with standard template and static folders
+TEMPLATE_DIR = os.path.join(PROJECT_ROOT, "server", "templates")
+STATIC_DIR = os.path.join(PROJECT_ROOT, "server", "static")
+if not os.path.exists(TEMPLATE_DIR):
+    TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), "templates")
+if not os.path.exists(STATIC_DIR):
+    STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
+
+app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
 
 @app.before_request
 def handle_preflight():
@@ -522,47 +529,31 @@ def generate_topics():
 
     return jsonify({"topics": topics})
 
-# 9. Fallback Static Files router for local serving
-@app.route('/', defaults={'path': ''}, methods=['GET', 'HEAD', 'POST', 'OPTIONS'])
-@app.route('/<path:path>', methods=['GET', 'HEAD', 'POST', 'OPTIONS'])
-def serve_static(path):
-    if request.method == 'OPTIONS':
-        return '', 200
-    print(f"DEBUG REQUEST PATH: {path}")
-    if not path or path == '/':
-        path = 'index.html'
-    
-    path = path.lstrip('/')
-    if path in STATIC_ASSETS:
-        asset = STATIC_ASSETS[path]
-        if asset['type'] == 'text':
-            ct = 'text/html'
-            if path.endswith('.css'): ct = 'text/css'
-            elif path.endswith('.js'): ct = 'application/javascript'
-            elif path.endswith('.png'): ct = 'image/png'
-            elif path.endswith('.ico'): ct = 'image/x-icon'
-            elif path.endswith('.json'): ct = 'application/json'
-            data = asset['content']
-            if isinstance(data, str):
-                data = data.encode('utf-8', errors='ignore')
-            return Response(data, mimetype=ct)
-        else:
-            data = base64.b64decode(asset['content'])
-            ct = 'image/png' if path.endswith('.png') else 'image/x-icon'
-            return Response(data, mimetype=ct)
-            
-    if f"{path}/index.html" in STATIC_ASSETS:
-        asset = STATIC_ASSETS[f"{path}/index.html"]
-        data = asset['content']
-        if isinstance(data, str):
-            data = data.encode('utf-8', errors='ignore')
-        return Response(data, mimetype='text/html')
-        
-    if 'index.html' in STATIC_ASSETS:
-        asset = STATIC_ASSETS['index.html']
-        data = asset['content']
-        if isinstance(data, str):
-            data = data.encode('utf-8', errors='ignore')
-        return Response(data, mimetype='text/html')
-        
-    return "Not Found", 404
+# 9. Standard Flask Template and Static Routing
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/demo.html')
+def demo():
+    return render_template('demo.html')
+
+@app.route('/pages/<path:filename>')
+def serve_page(filename):
+    return render_template(f'pages/{filename}')
+
+@app.route('/css/<path:filename>')
+def serve_css(filename):
+    return send_from_directory(os.path.join(STATIC_DIR, 'css'), filename)
+
+@app.route('/js/<path:filename>')
+def serve_js(filename):
+    return send_from_directory(os.path.join(STATIC_DIR, 'js'), filename)
+
+@app.route('/assets/<path:filename>')
+def serve_assets(filename):
+    return send_from_directory(os.path.join(STATIC_DIR, 'assets'), filename)
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(STATIC_DIR, 'favicon.ico')

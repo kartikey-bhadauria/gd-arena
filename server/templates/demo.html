@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <meta charset="UTF-8">
+  <title>GD Arena — Backend Diagnostic & Health Test</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-stone-50 text-stone-900 p-8 font-sans">
+  <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg border border-stone-200 shadow-sm">
+    <h1 class="text-xl font-bold text-stone-900 mb-2">GD Arena Backend Health Test</h1>
+    <p class="text-xs text-stone-500 mb-4">Verifies /api/health, /api/chat, /api/tts, and /api/parse-resume.</p>
+    
+    <div class="space-y-3 text-xs">
+      <button onclick="checkHealth()" class="px-4 py-2 bg-stone-900 text-white font-semibold rounded-full hover:bg-stone-800">Check /api/health</button>
+      <div id="healthResult" class="p-3 bg-stone-100 rounded font-mono text-[11px] whitespace-pre-wrap">Click to test health...</div>
+
+      <button onclick="testChat()" class="px-4 py-2 bg-[#f99d72] text-stone-950 font-semibold rounded-full hover:bg-[#ffd4be]">Test /api/chat</button>
+      <div id="chatResult" class="p-3 bg-stone-100 rounded font-mono text-[11px] whitespace-pre-wrap">Click to test chat turn...</div>
+    </div>
+  </div>
+
+  <script>
+    async function checkHealth() {
+      const res = await fetch('/api/health');
+      const data = await res.json();
+      document.getElementById('healthResult').textContent = JSON.stringify(data, null, 2);
+    }
+    async function testChat() {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          topic: "AI in Campus Placements",
+          text: "I believe AI will augment rather than replace engineers."
+        })
+      });
+      const data = await res.json();
+      document.getElementById('chatResult').textContent = JSON.stringify(data, null, 2);
+    }
+  </script>
+  <script src="/js/cursor.js"></script>
+  <script src="/js/scroll-animations.js"></script>
+</body>
+</html>

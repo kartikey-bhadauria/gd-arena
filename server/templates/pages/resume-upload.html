@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume Upload & JD Match — GD Arena</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-[#fafaf9] min-h-screen text-[#1a1814] flex flex-col justify-between">
+
+  <!-- Header -->
+  <header class="bg-white border-b border-[rgba(38,57,90,0.1)] py-4 sticky top-0 z-20">
+    <div class="max-w-5xl mx-auto px-4 flex items-center justify-between">
+      <a href="/pages/mode-select.html" class="flex items-center gap-2 text-stone-600 hover:text-stone-900 text-xs font-semibold">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        <span>Back to Mode Selection</span>
+      </a>
+      <span id="targetModeBadge" class="text-xs font-mono px-2.5 py-0.5 rounded-full bg-orange-50 text-orange-700 border border-orange-200">Session Setup: Resume Verification</span>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-5xl mx-auto px-4 py-8 w-full flex-1">
+    <div class="max-w-2xl mx-auto space-y-6">
+      
+      <div class="text-center space-y-2">
+        <h2 id="resumeHeading" class="text-2xl font-bold tracking-tight text-[#1a1814]">Submit your Resume / CV</h2>
+        <p class="text-xs text-stone-500">The AI interviewer and panel tailor technical depth and arguments to your actual projects.</p>
+      </div>
+
+      <!-- Drag & Drop Zone / Paste Area -->
+      <div class="card bg-white !p-6 space-y-4">
+        
+        <!-- Toggle Buttons & 1-Click Sample -->
+        <div class="flex items-center justify-between pb-2 border-b border-stone-100 text-xs">
+          <div class="flex items-center gap-3">
+            <button id="tabPaste" onclick="switchTab('paste')" class="font-bold text-[#1a1814] border-b-2 border-[#f99d72] pb-1">Paste Resume Text</button>
+            <button id="tabFile" onclick="switchTab('file')" class="text-stone-400 pb-1 hover:text-stone-700">Upload File (.txt / .pdf)</button>
+          </div>
+          <button onclick="loadSampleResume()" class="text-emerald-700 hover:text-emerald-900 font-semibold text-[11px] flex items-center gap-1">
+            <i data-lucide="zap" class="w-3.5 h-3.5 text-emerald-600"></i>
+            <span>Fill Sample SDE CV</span>
+          </button>
+        </div>
+
+        <!-- Paste Text Mode -->
+        <div id="pasteSection" class="space-y-3">
+          <textarea id="resumeText" rows="6" placeholder="Paste your resume content (skills, projects, education, internships) here..." class="w-full p-3 rounded-lg border border-stone-200 text-xs font-mono focus:ring-2 focus:ring-[#f99d72] focus:outline-none"></textarea>
+        </div>
+
+        <!-- File Upload Mode (Hidden by default) -->
+        <div id="fileSection" class="hidden p-8 border-2 border-dashed border-stone-300 rounded-lg text-center space-y-2 bg-stone-50">
+          <i data-lucide="file-up" class="w-8 h-8 text-stone-400 mx-auto"></i>
+          <p class="text-xs text-stone-600 font-medium">Select a resume file from your computer</p>
+          <input type="file" id="resumeFileInput" accept=".txt,.pdf,.doc,.docx" class="text-xs text-stone-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-stone-900 file:text-white hover:file:bg-stone-800">
+        </div>
+
+        <!-- Optional Job Description Textarea -->
+        <div class="pt-2">
+          <label class="block font-medium text-xs text-stone-700 mb-1">Target Job Description (Optional for Alignment Score)</label>
+          <textarea id="jdText" rows="2" placeholder="Paste target company requirements (e.g. SDE Backend, React, FastAPI, System Design)..." class="w-full p-2.5 rounded-lg border border-stone-200 text-xs font-mono focus:ring-2 focus:ring-[#f99d72] focus:outline-none"></textarea>
+        </div>
+
+        <!-- Primary Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-center gap-3 pt-2">
+          <button onclick="handleParseAndProceed()" class="btn-primary w-full !py-3 !text-xs !justify-center shadow-md flex-1">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span id="proceedBtnText">Attach Resume & Enter Room →</span>
+          </button>
+          
+          <button onclick="skipAndProceed()" class="btn-secondary w-full sm:w-auto !py-3 !px-4 !text-xs !justify-center text-stone-600">
+            <span>Skip / Default Profile</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Parsed Output Card (Hidden initially) -->
+      <div id="parsedCard" class="card bg-white !p-6 space-y-4 hidden">
+        <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+          <h3 class="font-bold text-sm text-[#1a1814]">Extracted Candidate Profile</h3>
+          <span class="text-[10px] font-mono bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200">Parsed Successfully</span>
+        </div>
+
+        <!-- JD Match Banner -->
+        <div id="jdMatchBanner" class="p-3 rounded-lg bg-stone-50 border border-stone-200 flex items-center justify-between text-xs">
+          <div>
+            <span class="font-semibold text-stone-700">JD Alignment Score:</span>
+            <span id="jdScoreVal" class="font-black text-emerald-600 ml-1">84%</span>
+          </div>
+          <span class="text-[11px] text-stone-500">Ready for 1-on-1 interview questions</span>
+        </div>
+
+        <!-- Skills Chips -->
+        <div class="space-y-1.5">
+          <span class="text-xs font-semibold text-stone-600">Detected Skills:</span>
+          <div id="skillsChips" class="flex flex-wrap gap-1.5"></div>
+        </div>
+
+        <!-- Extracted Projects -->
+        <div class="space-y-1.5">
+          <span class="text-xs font-semibold text-stone-600">Extracted Projects:</span>
+          <ul id="projectsList" class="text-xs text-stone-700 space-y-1 list-disc list-inside bg-stone-50 p-2.5 rounded border border-stone-200"></ul>
+        </div>
+
+        <!-- Action -->
+        <div class="pt-3 border-t border-stone-100 flex items-center justify-between">
+          <button onclick="window.location.href='/pages/mode-select.html'" class="btn-primary !py-2.5 !px-6 !text-xs">
+            <span>Proceed to Practice Mode Selection</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="py-4 text-center text-[11px] text-stone-400">
+    GD Arena · Resume parsing runs in-memory and is never shared.
+  </footer>
+
+  <script src="/js/resume.js" type="module"></script>
+  <script src="/js/cursor.js"></script>
+  <script src="/js/scroll-animations.js"></script>
+</body>
+</html>
