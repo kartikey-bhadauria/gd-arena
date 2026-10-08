@@ -31,8 +31,12 @@
         <span id="roomTimer">00:00 / 08:00</span>
       </div>
 
-      <!-- Right Actions: Voice Settings & End Session -->
+      <!-- Right Actions: Resume Check, Voice Settings & End Session -->
       <div class="flex items-center gap-2">
+        <button onclick="openResumeModal()" class="btn-secondary !py-1.5 !px-3 !text-xs gap-1.5 bg-stone-50 hover:bg-stone-100">
+          <i data-lucide="file-text" class="w-3.5 h-3.5 text-emerald-600"></i>
+          <span>Resume / CV</span>
+        </button>
         <button onclick="openVoiceSettings()" class="btn-secondary !py-1.5 !px-3 !text-xs gap-1.5 bg-stone-50 hover:bg-stone-100">
           <i data-lucide="settings-2" class="w-3.5 h-3.5 text-[#f99d72]"></i>
           <span>Voice & Engine</span>

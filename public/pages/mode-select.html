@@ -140,21 +140,45 @@
     GD Arena · All AI voices and behaviors simulate real campus placement interviewers.
   </footer>
 
-  <script>
+  <script type="module">
+    import { ResumeModal } from '/js/resume-modal.js';
+
+    let resumeModal = null;
+    let pendingMode = 'interview';
+
     document.addEventListener('DOMContentLoaded', () => {
       if (window.lucide) window.lucide.createIcons();
       const user = JSON.parse(localStorage.getItem('gd_user') || '{}');
       if (user.name) {
         document.getElementById('userChip').textContent = user.name;
       }
+
+      resumeModal = new ResumeModal({
+        onConfirm: (parsed) => {
+          proceedToRoom(pendingMode);
+        }
+      });
     });
 
-    function startMode(mode) {
+    window.startMode = function(mode) {
+      pendingMode = mode;
+      if (mode === 'gd') {
+        const topic = document.getElementById('gdTopicSelect').value;
+        localStorage.setItem('gd_selected_topic', topic);
+      }
+      
+      // Always ask for Resume / CV before entering room
+      if (resumeModal) {
+        resumeModal.show();
+      } else {
+        proceedToRoom(mode);
+      }
+    };
+
+    function proceedToRoom(mode) {
       if (mode === 'interview') {
         window.location.href = '/pages/interview-room.html';
       } else {
-        const topic = document.getElementById('gdTopicSelect').value;
-        localStorage.setItem('gd_selected_topic', topic);
         window.location.href = '/pages/gd-room.html';
       }
     }

@@ -12,12 +12,13 @@ export async function getHealth() {
   }
 }
 
-export async function startSession(mode = 'gd', topic = '', panelSize = 4) {
+export async function startSession(mode = 'gd', topic = '', panelSize = 4, resume = null) {
   try {
+    const resumeData = resume || JSON.parse(localStorage.getItem('gd_resume') || '{}');
     const res = await fetch(`${API_BASE}/api/session/start`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ mode, topic, panel_size: panelSize })
+      body: JSON.stringify({ mode, topic, panel_size: panelSize, resume: resumeData })
     });
     return await res.json();
   } catch (err) {

@@ -141,11 +141,17 @@ class GDArenaServerHandler(SimpleHTTPRequestHandler):
 
             turn_engine = TurnEngine()
 
+            resume_info = payload.get('resume', {})
+
             if mode == 'interview':
-                opening_text = f"Good morning. I am Ms. Kapoor. We are evaluating candidates for our technical placement drive. Let us begin with your background and your approach to '{topic}'. Tell me about your practical experience."
+                skills_list = resume_info.get('skills', [])
+                if skills_list:
+                    opening_text = f"Good morning. I am Ms. Kapoor. We have reviewed your resume highlighting {', '.join(skills_list[:3])}. We are evaluating candidates for our technical placement drive. Let us begin with your background and your approach to '{topic}'."
+                else:
+                    opening_text = f"Good morning. I am Ms. Kapoor. We are evaluating candidates for our technical placement drive. Let us begin with your background and your approach to '{topic}'. Tell me about your practical experience."
                 mod_key = "interviewer"
             else:
-                opening_text = f"Good morning candidates. I am Mr. Verma, your moderator. All other participants are AI. Today's GD topic is: '{topic}'. You have 8 minutes. The floor is open."
+                opening_text = f"Good morning candidates. I am Mr. Verma, your moderator. All other participants are AI. Today's GD topic is: '{topic}'. You have 10 minutes. The floor is open."
                 mod_key = "moderator"
 
             session_data = {
@@ -153,6 +159,7 @@ class GDArenaServerHandler(SimpleHTTPRequestHandler):
                 "mode": mode,
                 "topic": topic,
                 "panel_size": panel_size,
+                "resume": resume_info,
                 "start_time": time.time(),
                 "turn_engine": turn_engine,
                 "transcript": [
@@ -230,7 +237,7 @@ class GDArenaServerHandler(SimpleHTTPRequestHandler):
             turn_engine.note_ai_spoke(next_spk)
 
             # Generate AI dialogue turn
-            ai_text = self.generate_llm_turn(persona, session["topic"], session["mode"], student_text, session["transcript"])
+            ai_text = self.generate_llm_turn(persona, session["topic"], session["mode"], student_text, session["transcript"], session.get("resume"))
 
             import re
             is_rejected = False
@@ -478,11 +485,16 @@ class GDArenaServerHandler(SimpleHTTPRequestHandler):
 
         super().do_POST()
 
-    def generate_llm_turn(self, persona, topic, mode, student_text, transcript):
+    def generate_llm_turn(self, persona, topic, mode, student_text, transcript, resume=None):
         system_instruction = persona["system_prompt"].format(topic=topic)
         recent_context = "\n".join([f"{t['name']}: {t['text']}" for t in transcript[-4:]])
+        
+        resume_context = ""
+        if resume and resume.get("skills"):
+            resume_context = f"\nCandidate Stated Resume Profile: Skills: [{', '.join(resume['skills'][:5])}], Projects: [{', '.join(resume.get('projects', [])[:2])}]"
 
         prompt = f"""{system_instruction}
+{resume_context}
 
 CRITICAL RULE: If the candidate speaks complete nonsense, gibberish, acts unprofessionally, or goes entirely off-topic, you MUST reject them immediately. Start your response EXACTLY with "[REJECT: <brief reason>]". Then say "We will contact you later. This session is terminated."
 

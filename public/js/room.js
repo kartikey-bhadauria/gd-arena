@@ -1,4 +1,5 @@
 import { SpeechAnalytics } from './fluency.js';
+import { ResumeModal } from './resume-modal.js';
 // GD Arena & Interview Room Live Voice Orchestration Engine
 // STRICT VOICE RULE: Only one voice at a time. Student speech always wins.
 
@@ -34,11 +35,26 @@ export class RoomController {
       onUpdate: (stats) => this.updateFluencyUI(stats)
     });
     this.pendingThinkingTimeout = null;
+
+    this.resumeModal = new ResumeModal({
+      mode: this.mode,
+      onConfirm: (parsed) => {
+        if (parsed && parsed.skills) {
+          this.showNotice(`Resume Profile Loaded: ${parsed.skills.slice(0, 3).join(', ')}`);
+        }
+      }
+    });
+    window.openResumeModal = () => this.resumeModal.show();
   }
 
   async init() {
     this.setupUI();
     this.startTimer();
+
+    // Auto-prompt Resume / CV check if not previously attached
+    if (!localStorage.getItem('gd_resume')) {
+      setTimeout(() => this.resumeModal.show(), 400);
+    }
 
     // Start session on backend
     const res = await startSession(this.mode, this.topic, 4);
