@@ -82,19 +82,40 @@ python server.py
 
 ---
 
-## 📸 Screenshots
+## 📸 Interface Screenshots
 
 <div align="center">
-  <br>
-  <h3>🔥 Landing & Mode Selection</h3>
-  <p><em>Sleek, high-impact dark/light interface designed for peak focus.</em></p>
-  <br>
-  <h3>⚡ Active Group Discussion Room</h3>
-  <p><em>Real-time AI persona debate, voice VU meter, and transcript stream.</em></p>
-  <br>
-  <h3>📊 Quote-Verified Performance Report</h3>
-  <p><em>Granular feedback with exact transcript quotes, timestamps, and actionable rebuttals.</em></p>
+
+### 🌟 Landing & Mode Selection
+*Sleek, high-impact dark/light interface designed for peak focus.*
+<br><br>
+<img src="docs/screenshots/landing.png" width="850px" alt="Landing Page">
+
+<br><br>
+
+### ⚡ Active Group Discussion Room
+*Real-time AI persona debate, voice VU meter, and live transcript stream.*
+<br><br>
+<img src="docs/screenshots/gd-room.png" width="850px" alt="GD Room">
+
+<br><br>
+
+### 📊 Quote-Verified Performance Report
+*Granular feedback with exact transcript quotes, timestamps, and actionable rebuttals.*
+<br><br>
+<img src="docs/screenshots/report.png" width="850px" alt="Performance Report">
+
 </div>
+
+---
+
+## 👥 Core Contributors & Team
+
+| Contributor | Role & Responsibilities | GitHub |
+| :--- | :--- | :--- |
+| **Kartikey Bhadauria** | Creator & Lead Full-Stack Architect | [@kartikey-bhadauria](https://github.com/kartikey-bhadauria) |
+| **Priyanshu Pandey** | Lead UI/UX Designer (Primefold System) | *Designer* |
+| **Anshuman Maurya** | Senior Frontend Developer & Interaction Engineer | *Frontend Developer* |
 
 ---
 
