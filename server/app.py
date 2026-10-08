@@ -259,19 +259,7 @@ def health():
         "edge_tts": HAS_EDGE_TTS
     })
 
-@app.route('/api/debug-dir', methods=['GET'])
-def debug_dir():
-    server_contents = []
-    try:
-        server_contents = os.listdir('/var/task/server')
-    except Exception as e:
-        server_contents = [str(e)]
-    return jsonify({
-        "DIRECTORY": DIRECTORY,
-        "exists": os.path.exists(DIRECTORY),
-        "server_contents": server_contents,
-        "project_root": PROJECT_ROOT
-    })
+
 
 # 2. Session start endpoint
 @app.route('/api/session/start', methods=['POST'])

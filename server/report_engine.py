@@ -53,48 +53,47 @@ def generate_report_json(transcript, topic, stats, mode="gd"):
     last_quote = student_entries[-1]["text"] if has_student else "No closing synthesis provided."
     last_ts = student_entries[-1].get("timestamp", "04:15") if has_student else "00:00"
 
-    # Fully dynamic transcript-sensitive scoring based on real performance metrics
-    import random
+    # Fully deterministic transcript-sensitive scoring based on real performance metrics
     student_words = stats.get("student_words", 0)
     student_turns = stats.get("student_turns", 0)
     interrupt_count = stats.get("interruptions", 0)
 
     first_len = len(first_quote.split())
     if not has_student or first_len < 4:
-        opening_score = random.uniform(3.0, 4.8)
+        opening_score = 4.2
     elif first_len < 12:
-        opening_score = random.uniform(5.5, 7.0)
+        opening_score = 6.5
     else:
-        opening_score = random.uniform(7.2, 9.5)
+        opening_score = 8.5
 
     all_student_text = " ".join([t.get("text", "") for t in student_entries]).lower()
     tech_keywords = ["scale", "latency", "architecture", "trade", "cost", "security", "performance", "system", "data", "user", "consistency", "throughput"]
     keyword_hits = sum(1 for kw in tech_keywords if kw in all_student_text)
 
     if student_words < 30:
-        idea_score = random.uniform(3.5, 5.2)
+        idea_score = 4.5
     elif student_words < 80:
-        idea_score = random.uniform(5.5, 7.4)
+        idea_score = 6.8
     else:
-        idea_score = min(9.8, round(6.8 + (keyword_hits * 0.3) + random.uniform(0.0, 1.2), 1))
+        idea_score = min(9.5, round(6.0 + (keyword_hits * 0.4), 1))
 
     if student_turns <= 1:
-        build_score = random.uniform(4.0, 5.8)
+        build_score = 5.0
     elif student_turns <= 3:
-        build_score = random.uniform(6.0, 8.0)
+        build_score = 7.2
     else:
-        build_score = random.uniform(8.1, 9.6)
+        build_score = 8.8
 
-    listen_score = max(3.5, min(9.8, round(9.0 - (interrupt_count * 0.8) + random.uniform(-0.4, 0.4), 1)))
-    interruption_score = max(3.5, min(9.8, round(8.5 - (interrupt_count * 0.6) + random.uniform(-0.5, 0.5), 1)))
+    listen_score = max(4.0, min(9.5, round(9.0 - (interrupt_count * 0.5), 1)))
+    interruption_score = max(4.0, min(9.5, round(8.5 - (interrupt_count * 0.4), 1)))
 
     last_len = len(last_quote.split())
     if student_turns >= 3 and last_len > 10:
-        closing_score = random.uniform(7.5, 9.6)
+        closing_score = 8.8
     elif student_turns >= 2:
-        closing_score = random.uniform(6.0, 8.0)
+        closing_score = 7.0
     else:
-        closing_score = random.uniform(4.0, 6.0)
+        closing_score = 5.0
 
     overall = round(
         (opening_score * 1.5 + idea_score * 2.0 + build_score * 1.5

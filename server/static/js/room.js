@@ -173,7 +173,6 @@ export class RoomController {
     this.hideThinkingState();
     this.clearActiveSpeaker();
     this.turnManager.noteStudentSpoke();
-    this.analytics.processText(text);
 
     if (isManualButton) {
       this.showNudge("You claimed the floor. Speak now.");
