@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up — GD Arena</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-white min-h-screen flex text-[#1a1814]">
+  
+  <!-- Left Column: Ink Hero Panel -->
+  <div class="hidden lg:flex lg:w-1/2 bg-[#1a1814] text-white p-12 flex-col justify-between relative overflow-hidden">
+    <div class="space-y-6 z-10">
+      <a href="/" class="flex items-center gap-2.5 text-decoration-none">
+        <div class="w-8 h-8 rounded-full bg-[#f99d72] flex items-center justify-center font-bold text-[#1a1814] text-sm">GD</div>
+        <span class="font-bold text-lg tracking-tight text-white">GD Arena</span>
+      </a>
+      
+      <div class="pt-16 space-y-4 max-w-md">
+        <h2 class="text-3xl font-extrabold tracking-tight leading-snug">
+          Real GD pressure.<br>Zero real-world risk.
+        </h2>
+        <p class="text-stone-400 text-sm leading-relaxed">
+          Join thousands of engineering and MBA students building communication poise for top placements.
+        </p>
+      </div>
+
+      <div class="space-y-3 pt-6 text-xs text-stone-300">
+        <div class="flex items-center gap-2.5">
+          <i data-lucide="check" class="w-4 h-4 text-[#f99d72]"></i>
+          <span>Unlimited free AI GD rounds & 1-on-1 interviews</span>
+        </div>
+        <div class="flex items-center gap-2.5">
+          <i data-lucide="check" class="w-4 h-4 text-[#f99d72]"></i>
+          <span>Transcript-linked analytics on your hesitations & rebuttals</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-4 rounded-lg bg-white/5 border border-white/10 z-10 text-[11px] text-stone-400">
+      Zero payment required. Powered by free-tier AI architecture.
+    </div>
+  </div>
+
+  <!-- Right Column: Signup Form -->
+  <div class="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12">
+    <div class="w-full max-w-md space-y-6">
+      <div>
+        <h2 class="text-2xl font-bold tracking-tight text-[#1a1814]">Create your account</h2>
+        <p class="text-xs text-stone-500 mt-1">Start practicing group discussions in under 60 seconds.</p>
+      </div>
+
+      <form id="signupForm" class="space-y-3.5 text-xs">
+        <div>
+          <label class="block font-medium text-stone-700 mb-1">Full Name</label>
+          <input type="text" id="name" required placeholder="Kartikey Bhadauria" class="w-full px-3.5 py-2.5 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-[#f99d72] focus:border-transparent text-xs">
+        </div>
+
+        <div>
+          <label class="block font-medium text-stone-700 mb-1">Email address</label>
+          <input type="email" id="email" required placeholder="student@college.edu" class="w-full px-3.5 py-2.5 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-[#f99d72] focus:border-transparent text-xs">
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-medium text-stone-700 mb-1">Password</label>
+            <input type="password" id="password" required placeholder="••••••••" class="w-full px-3 py-2.5 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-[#f99d72] text-xs">
+          </div>
+          <div>
+            <label class="block font-medium text-stone-700 mb-1">Confirm</label>
+            <input type="password" id="confirmPassword" required placeholder="••••••••" class="w-full px-3 py-2.5 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-[#f99d72] text-xs">
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 pt-1">
+          <input type="checkbox" id="terms" required class="rounded border-stone-300 text-[#f99d72] focus:ring-[#f99d72]">
+          <label for="terms" class="text-[11px] text-stone-600">I agree to the Terms of Service and AI Practice Privacy Policy</label>
+        </div>
+
+        <button type="submit" class="btn-primary w-full !py-2.5 !text-xs !justify-center">
+          <span>Create account & setup profile</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </button>
+      </form>
+
+      <div class="relative flex items-center justify-center text-[11px] text-stone-400">
+        <span class="bg-white px-2 z-10">or sign up with</span>
+        <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-stone-200"></div></div>
+      </div>
+
+      <button onclick="mockOAuth('Google')" class="btn-secondary w-full !py-2.5 !text-xs !justify-center gap-2">
+        <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.3 9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/><path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15.1c0 2.8.7 5.4 1.9 7.8l3.7-2.9z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.8-2.5 1.3-4.3 1.3-3 0-5.5-2.3-6.4-5.2L1.9 17.1C3.7 20.8 7.5 24 12 24z"/></svg>
+        <span>Sign up with Google</span>
+      </button>
+
+      <p class="text-center text-xs text-stone-500">
+        Already have an account? <a href="/pages/login.html" class="font-bold text-[#1a1814] underline">Sign in</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="/js/auth.js" type="module"></script>
+</body>
+</html>

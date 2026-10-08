@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Choose Practice Mode — GD Arena</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-[#fafaf9] min-h-screen text-[#1a1814] flex flex-col justify-between">
+
+  <!-- Header -->
+  <header class="bg-white border-b border-[rgba(38,57,90,0.1)] py-4 sticky top-0 z-20">
+    <div class="max-w-6xl mx-auto px-4 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-full bg-[#f99d72] flex items-center justify-center font-bold text-[#1a1814] text-xs">GD</div>
+        <span class="font-bold text-base tracking-tight text-[#1a1814]">GD Arena</span>
+      </a>
+      <div class="flex items-center gap-4 text-xs">
+        <a href="/pages/history.html" class="text-stone-600 hover:text-stone-900 font-medium flex items-center gap-1.5">
+          <i data-lucide="history" class="w-3.5 h-3.5"></i>
+          <span>Past Sessions</span>
+        </a>
+        <div class="w-px h-4 bg-stone-200"></div>
+        <span id="userChip" class="px-2.5 py-1 rounded-full bg-stone-100 text-stone-700 font-semibold text-[11px]">Candidate</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Grid -->
+  <main class="max-w-5xl mx-auto px-4 py-10 w-full flex-1">
+    
+    <div class="text-center max-w-xl mx-auto mb-10 space-y-2">
+      <h1 class="text-3xl font-extrabold tracking-tight text-[#1a1814]">Choose your practice mode</h1>
+      <p class="text-xs text-stone-500">Practice full group discussion dynamics or undergo an intense 1-on-1 technical placement interrogation.</p>
+    </div>
+
+    <!-- Recommended Banner -->
+    <div class="p-3.5 mb-8 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-between text-xs max-w-4xl mx-auto">
+      <div class="flex items-center gap-2">
+        <i data-lucide="sparkles" class="w-4 h-4 text-emerald-600"></i>
+        <span class="text-emerald-900"><strong>Recommended for you:</strong> 4-Person Campus GD round with live speech barge-in.</span>
+      </div>
+      <a href="/pages/resume-upload.html" class="text-emerald-700 font-semibold underline text-[11px]">Update Resume Profile</a>
+    </div>
+
+    <!-- Mode Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+      
+      <!-- Card 1: 1-on-1 Interview -->
+      <div class="card bg-white !p-7 flex flex-col justify-between space-y-6 border border-[rgba(38,57,90,0.16)] hover:border-[#f99d72]">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="w-12 h-12 rounded-xl bg-stone-100 flex items-center justify-center text-stone-800">
+              <i data-lucide="user" class="w-6 h-6"></i>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-100 text-stone-600">Medium</span>
+              <span class="text-[10px] font-mono text-stone-400">~15 Min</span>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-bold text-[#1a1814]">Live 1-on-1 Interview</h3>
+            <p class="text-xs text-stone-500 mt-1 leading-relaxed">
+              Practice HR, technical, or case interviews with Ms. Kapoor who adapts questions directly to your uploaded resume.
+            </p>
+          </div>
+
+          <div class="p-3 rounded-lg bg-stone-50 border border-stone-100 space-y-1.5 text-xs">
+            <span class="text-[10px] uppercase font-bold text-stone-400">Sample Scenarios:</span>
+            <ul class="text-[11px] text-stone-600 space-y-1 list-disc list-inside">
+              <li>High-Concurrency Backend Scalability & Latency</li>
+              <li>Distributed Database Sharding & Caching Failures</li>
+              <li>Behavioral Conflict & Team Deadlocks</li>
+            </ul>
+          </div>
+        </div>
+
+        <button onclick="startMode('interview')" class="btn-primary w-full !py-3 !text-xs !justify-center">
+          <span>Start 1-on-1 Interview</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+
+      <!-- Card 2: Group Discussion -->
+      <div class="card bg-white !p-7 flex flex-col justify-between space-y-6 border border-[rgba(38,57,90,0.16)] hover:border-[#f99d72] relative overflow-hidden">
+        <div class="absolute top-0 right-0 bg-[#f99d72] text-[#1a1814] text-[9px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-wider">
+          Most Popular
+        </div>
+
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="w-12 h-12 rounded-xl bg-stone-900 flex items-center justify-center text-white">
+              <i data-lucide="users" class="w-6 h-6"></i>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-50 text-red-600">Hard</span>
+              <span class="text-[10px] font-mono text-stone-400">8 Min</span>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-bold text-[#1a1814]">Group Discussion (Panel)</h3>
+            <p class="text-xs text-stone-500 mt-1 leading-relaxed">
+              Sit in a real GD with 4 distinct AI participants (Aarav, Priya, Rohan, Neha) + 1 moderator (Mr. Verma).
+            </p>
+          </div>
+
+          <div class="p-3 rounded-lg bg-stone-50 border border-stone-100 space-y-1.5 text-xs">
+            <span class="text-[10px] uppercase font-bold text-stone-400">Select Topic:</span>
+            <select id="gdTopicSelect" class="w-full p-2 bg-white rounded border border-stone-200 text-xs font-medium text-stone-800">
+              <option value="Should AI Replace Software Engineers in Campus Hiring?">Should AI Replace Software Engineers in Campus Hiring?</option>
+              <option value="Is Remote Work Hurting Engineering Culture and Innovation?">Is Remote Work Hurting Engineering Culture & Innovation?</option>
+              <option value="Monolith vs Microservices for Early Stage Startups">Monolith vs Microservices for Early Stage Startups</option>
+              <option value="Should Engineering Colleges Eliminate CGPA Filters?">Should Engineering Colleges Eliminate CGPA Filters?</option>
+            </select>
+          </div>
+        </div>
+
+        <button onclick="startMode('gd')" class="btn-primary w-full !py-3 !text-xs !justify-center">
+          <span>Start GD Simulation Room</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- History Link Footer -->
+    <div class="text-center mt-12">
+      <a href="/pages/history.html" class="text-xs text-stone-500 hover:text-stone-900 font-medium underline">
+        View your past placement performance reports & trends →
+      </a>
+    </div>
+
+  </main>
+
+  <footer class="py-4 text-center text-[11px] text-stone-400">
+    GD Arena · All AI voices and behaviors simulate real campus placement interviewers.
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) window.lucide.createIcons();
+      const user = JSON.parse(localStorage.getItem('gd_user') || '{}');
+      if (user.name) {
+        document.getElementById('userChip').textContent = user.name;
+      }
+    });
+
+    function startMode(mode) {
+      if (mode === 'interview') {
+        window.location.href = '/pages/interview-room.html';
+      } else {
+        const topic = document.getElementById('gdTopicSelect').value;
+        localStorage.setItem('gd_selected_topic', topic);
+        window.location.href = '/pages/gd-room.html';
+      }
+    }
+  </script>
+</body>
+</html>

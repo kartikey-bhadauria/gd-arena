@@ -1,0 +1,31 @@
+{
+  "abstract": [
+    "Is failure a better teacher than success?",
+    "Can money buy happiness?",
+    "Is ambition overrated?",
+    "Does social media connect or isolate us?"
+  ],
+  "controversial": [
+    "Should campus placements be abolished?",
+    "Is AI a threat to white-collar jobs?",
+    "Should coding be mandatory in schools?",
+    "Is work-from-home killing company culture?"
+  ],
+  "case_based": [
+    "A startup has 6 months of runway. Should they pivot or double down?",
+    "A college wants to ban smartphones. How would you implement it?",
+    "A product has high engagement but no revenue. What do you do?"
+  ],
+  "current_affairs": [
+    "Should AI replace teachers in schools?",
+    "Is the 4-day workweek viable in India?",
+    "Should internships be paid?",
+    "Is remote work here to stay?"
+  ],
+  "campus_placement": [
+    "Should companies hire based on CGPA?",
+    "Is a Tier-2 college degree a disadvantage?",
+    "Should students take gap years to upskill?",
+    "Is a service company the right first job?"
+  ]
+}

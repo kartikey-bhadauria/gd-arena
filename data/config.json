@@ -1,0 +1,28 @@
+{
+  "durations": [
+    5,
+    8,
+    15
+  ],
+  "phases": [
+    "Opening",
+    "Discussion",
+    "Closing"
+  ],
+  "reactionDelay": 1350,
+  "silenceThreshold": 900,
+  "maxAITurnsInARow": 2,
+  "defaultPanelSize": 4,
+  "sampleScenarios": {
+    "interview": [
+      "Technical Core & Scalability Architecture",
+      "Behavioral Conflict & Leadership Under Pressure",
+      "System Design & Database Failure Modes"
+    ],
+    "gd": [
+      "Should AI Replace Software Engineers in Campus Hiring?",
+      "Monolith vs Microservices for Seed-Stage Startups",
+      "Should Engineering Colleges Eliminate CGPA Filters?"
+    ]
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "dimensions": {
+    "opening": {
+      "weight": 1.5,
+      "min_pass": 5,
+      "label": "Opening Statement & Initiation"
+    },
+    "idea_quality": {
+      "weight": 2.0,
+      "min_pass": 5,
+      "label": "Idea Quality & Logical Reasoning"
+    },
+    "building_on_others": {
+      "weight": 1.5,
+      "min_pass": 4,
+      "label": "Building on Others & Synthesis"
+    },
+    "listening": {
+      "weight": 1.5,
+      "min_pass": 5,
+      "label": "Active Listening & Composure"
+    },
+    "handling_interruptions": {
+      "weight": 1.0,
+      "min_pass": 4,
+      "label": "Handling Interruptions & Rebuttals"
+    },
+    "closing": {
+      "weight": 1.5,
+      "min_pass": 5,
+      "label": "Closing Synthesis & Conclusion"
+    }
+  },
+  "tiers": {
+    "weak": {
+      "range": [
+        0,
+        4
+      ],
+      "label": "Weak",
+      "meaning": "You'd get cut in Round 1"
+    },
+    "average": {
+      "range": [
+        4,
+        6
+      ],
+      "label": "Average",
+      "meaning": "You'd survive, not stand out"
+    },
+    "strong": {
+      "range": [
+        6,
+        8
+      ],
+      "label": "Strong",
+      "meaning": "You'd get shortlisted"
+    },
+    "elite": {
+      "range": [
+        8,
+        10
+      ],
+      "label": "Elite",
+      "meaning": "You'd lead the room"
+    }
+  },
+  "red_flags": [
+    "Zero speaking time in first 90 seconds",
+    "Contradicting self without acknowledgment",
+    "Interrupting more than 4 times",
+    "No references to other participants",
+    "Off-topic for more than 30 seconds without recovery"
+  ]
+}

@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GD Arena — Walk into your next GD already ready.</title>
+  <meta name="description" content="Voice-first AI Group Discussion and Placement Interview practice platform with realistic opponent personalities, live speech synthesis, and strict quote-verified scoring.">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Custom Design System -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-white text-[#1a1814] antialiased">
+
+  <!-- 1. STICKY NAV -->
+  <header class="sticky top-0 z-50 glass">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <a href="/" class="flex items-center gap-2 text-decoration-none">
+          <div class="w-8 h-8 rounded-full bg-[#f99d72] flex items-center justify-center font-bold text-[#1a1814] text-sm shadow-sm">
+            GD
+          </div>
+          <span class="font-bold text-lg tracking-tight text-[#1a1814]">GD Arena</span>
+          <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 border border-stone-200">AI</span>
+        </a>
+      </div>
+
+      <!-- Center Links -->
+      <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-stone-600">
+        <a href="#how-it-works" class="hover:text-stone-900 transition">How it works</a>
+        <a href="#ai-panel" class="hover:text-stone-900 transition">AI Panel</a>
+        <a href="#report-preview" class="hover:text-stone-900 transition">Feedback</a>
+        <a href="#formats" class="hover:text-stone-900 transition">Formats</a>
+        <a href="#scoring" class="hover:text-stone-900 transition">Scoring</a>
+        <a href="#faq" class="hover:text-stone-900 transition">FAQ</a>
+      </nav>
+
+      <!-- Right Actions -->
+      <div class="flex items-center gap-3">
+        <a href="/pages/login.html" class="text-xs font-semibold text-stone-700 hover:text-stone-900 px-3 py-1.5 transition">Sign in</a>
+        <a href="/pages/mode-select.html" class="btn-primary text-xs !py-2 !px-4">
+          <span>Enter the room</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. HERO SECTION -->
+  <section class="pt-16 pb-20 lg:pt-24 lg:pb-28 overflow-hidden bg-gradient-to-b from-white via-[#fafaf9] to-white border-b border-[rgba(38,57,90,0.1)]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      
+      <!-- Left Column: Copy & Actions -->
+      <div class="lg:col-span-6 space-y-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-stone-100 border border-stone-200 text-xs font-medium text-stone-700">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#f99d72] animate-ping"></span>
+          <span>All participants are AI — 100% safe practice</span>
+        </div>
+
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1a1814] tracking-tight leading-[1.12]">
+          Walk into your next GD <span class="text-[#f99d72]">already ready.</span>
+        </h1>
+
+        <p class="text-base sm:text-lg text-[#848481] leading-relaxed max-w-xl">
+          A voice-first AI group discussion room. Speak with distinct AI personalities who interrupt, build, and disagree — then get an honest, transcript-linked report on exactly how you performed.
+        </p>
+
+        <div class="flex flex-wrap items-center gap-3.5 pt-2">
+          <a href="/pages/mode-select.html" class="btn-primary !text-sm !py-3 !px-6 shadow-md">
+            <span>Enter the room — it's free</span>
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+          </a>
+          <a href="#how-it-works" class="btn-secondary !text-sm !py-3 !px-5">
+            <i data-lucide="play-circle" class="w-4 h-4 text-stone-600"></i>
+            <span>See how it works</span>
+          </a>
+        </div>
+
+        <!-- Trust Subtitle -->
+        <div class="pt-3 flex items-center gap-4 text-xs text-stone-500 font-medium">
+          <span class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i> No signup to try</span>
+          <span class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i> Works in your browser</span>
+          <span class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i> Hindi–English ready</span>
+        </div>
+      </div>
+
+      <!-- Right Column: Live Room Mock Card -->
+      <div class="lg:col-span-6">
+        <div class="card !p-5 shadow-xl bg-white border border-[rgba(38,57,90,0.16)] relative">
+          <!-- Room Status Header -->
+          <div class="flex items-center justify-between pb-3.5 border-b border-stone-100 text-xs">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+              <span class="font-bold text-[#1a1814]">Live · GD Room #47</span>
+            </div>
+            <div class="flex items-center gap-2 font-mono text-stone-500 text-[11px]">
+              <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+              <span>04:12 / 08:00</span>
+            </div>
+          </div>
+
+          <!-- Topic Pill -->
+          <div class="my-3.5 p-2.5 rounded-lg bg-stone-50 border border-stone-100 flex items-center justify-between text-xs">
+            <span class="text-stone-500 font-medium">Topic:</span>
+            <span class="font-semibold text-stone-900 truncate ml-2">Should AI replace teachers in schools?</span>
+          </div>
+
+          <!-- 2x2 Participants Simulation Grid -->
+          <div class="grid grid-cols-2 gap-3 mb-4">
+            <!-- Candidate 4 (You) -->
+            <div class="p-3 rounded-lg border border-emerald-500/40 bg-emerald-50/40 relative">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="font-bold text-xs text-emerald-900">You</span>
+                <div class="eq-container">
+                  <span class="eq-bar"></span>
+                  <span class="eq-bar"></span>
+                  <span class="eq-bar"></span>
+                </div>
+              </div>
+              <p class="text-[11px] text-emerald-800 italic">"Teachers build critical thinking that models cannot."</p>
+            </div>
+
+            <!-- Aarav -->
+            <div class="p-3 rounded-lg border border-red-500/40 bg-red-50/30 active-speaker">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="font-bold text-xs text-red-900">Aarav (The Dominator)</span>
+                <span class="thinking-badge">Speaking</span>
+              </div>
+              <p class="text-[11px] text-stone-700">"AI tutors adapt to individual learning velocity 24/7."</p>
+            </div>
+
+            <!-- Priya -->
+            <div class="p-3 rounded-lg border border-cyan-500/30 bg-cyan-50/20">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="font-bold text-xs text-cyan-900">Priya (Data-Driven)</span>
+                <span class="text-[10px] text-stone-400 font-mono">Listening</span>
+              </div>
+              <p class="text-[11px] text-stone-600">"Studies in 40 schools show a 32% retention delta."</p>
+            </div>
+
+            <!-- Rohan -->
+            <div class="p-3 rounded-lg border border-amber-500/30 bg-amber-50/20">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="font-bold text-xs text-amber-900">Rohan (Synthesizer)</span>
+                <span class="text-[10px] text-stone-400 font-mono">Listening</span>
+              </div>
+              <p class="text-[11px] text-stone-600">"We can combine both: AI for drills, human for empathy."</p>
+            </div>
+          </div>
+
+          <!-- Live Caption Bar -->
+          <div class="p-2.5 rounded bg-[#1a1814] text-white text-xs font-mono mb-2 flex items-start gap-2">
+            <span class="text-[#f99d72]">[02:14] Aarav:</span>
+            <span class="text-stone-300">"AI can't inspire. A teacher sees potential you don't see in yourself."</span>
+          </div>
+
+          <!-- Silent Nudge Example -->
+          <div class="nudge w-full justify-between">
+            <span class="flex items-center gap-1.5">
+              <i data-lucide="alert-circle" class="w-3.5 h-3.5 text-amber-600"></i>
+              <span>You haven't spoken in 2:40 — Aarav is dominating the room.</span>
+            </span>
+            <span class="text-[10px] underline font-semibold cursor-pointer">Interrupt</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 3. TRUST STRIP (MARQUEE) -->
+  <section class="py-6 border-b border-stone-100 bg-[#fafaf9] overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center gap-4">
+      <span class="text-xs font-semibold uppercase tracking-wider text-stone-400 whitespace-nowrap">
+        Built for students from
+      </span>
+      <div class="overflow-hidden relative w-full flex-1">
+        <div class="marquee-track flex items-center gap-8 text-xs font-bold text-stone-600 tracking-wider">
+          <span>IIT BOMBAY</span> • <span>IIT DELHI</span> • <span>BITS PILANI</span> • <span>NIT TRICHY</span> • <span>IIM AHMEDABAD</span> • <span>VIT VELLORE</span> • <span>SRM UNIVERSITY</span> • <span>MANIPAL INSTITUTE</span> • <span>AKTU COLLEGES</span> • <span>DTU DELHI</span> • <span>IIT BOMBAY</span> • <span>IIT DELHI</span> • <span>BITS PILANI</span> • <span>NIT TRICHY</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. THE PROBLEM SECTION -->
+  <section class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+      <span class="text-xs font-bold uppercase tracking-wider text-[#f99d72]">The Problem</span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1a1814] tracking-tight">
+        You've never actually sat in a GD. Then you walk into a real one.
+      </h2>
+      <p class="text-base text-stone-500">
+        A GD needs 6–8 people, a moderator, a good topic, and someone honest to give feedback. Most students get their first real GD in a placement round — where it counts.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="card space-y-3">
+        <div class="w-10 h-10 rounded-full bg-red-50 text-red-600 flex items-center justify-center font-bold">1</div>
+        <h3 class="font-bold text-base text-[#1a1814]">No Real Panel to Practice</h3>
+        <p class="text-xs text-stone-600 leading-relaxed">
+          Getting 6 friends together for mock GDs never works: someone jokes around, nobody acts like an aggressive competitor, and timing collapses.
+        </p>
+      </div>
+
+      <div class="card space-y-3">
+        <div class="w-10 h-10 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center font-bold">2</div>
+        <h3 class="font-bold text-base text-[#1a1814]">Dishonest & Vague Feedback</h3>
+        <p class="text-xs text-stone-600 leading-relaxed">
+          Peers say "you spoke well" while actual placement recruiters ruthlessly eliminate 80% of the room for lack of structure, weak entry, or passivity.
+        </p>
+      </div>
+
+      <div class="card space-y-3">
+        <div class="w-10 h-10 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center font-bold">3</div>
+        <h3 class="font-bold text-base text-[#1a1814]">Zero Repeat Drills</h3>
+        <p class="text-xs text-stone-600 leading-relaxed">
+          Unlike coding problems on LeetCode, you cannot retry a GD 5 times in one evening to master interruption recovery and opening hooks.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. HOW IT WORKS -->
+  <section id="how-it-works" class="py-24 bg-[#fafaf9] border-y border-stone-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+        <span class="text-xs font-bold uppercase tracking-wider text-[#f99d72]">How It Works</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1a1814]">
+          From "just speaking" to real GD pressure
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="card space-y-2">
+          <span class="font-mono text-xs text-[#f99d72] font-bold">STEP 01</span>
+          <h4 class="font-bold text-sm text-[#1a1814]">Set up the room</h4>
+          <p class="text-xs text-stone-500">Pick a placement topic (abstract, tech, case) or let the AI assign a surprise round.</p>
+        </div>
+
+        <div class="card space-y-2">
+          <span class="font-mono text-xs text-[#f99d72] font-bold">STEP 02</span>
+          <h4 class="font-bold text-sm text-[#1a1814]">Speak out loud</h4>
+          <p class="text-xs text-stone-500">Unmute and speak naturally. Real-time STT transcribes your voice with sub-second latency.</p>
+        </div>
+
+        <div class="card space-y-2">
+          <span class="font-mono text-xs text-[#f99d72] font-bold">STEP 03</span>
+          <h4 class="font-bold text-sm text-[#1a1814]">Handle the room</h4>
+          <p class="text-xs text-stone-500">Aarav challenges your claims, Priya quotes metrics, and Mr. Verma manages the time.</p>
+        </div>
+
+        <div class="card space-y-2">
+          <span class="font-mono text-xs text-[#f99d72] font-bold">STEP 04</span>
+          <h4 class="font-bold text-sm text-[#1a1814]">Get the report</h4>
+          <p class="text-xs text-stone-500">Receive strict scores across 6 dimensions with exact timestamped quotes from your transcript.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. THE AI PANEL -->
+  <section id="ai-panel" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+      <span class="text-xs font-bold uppercase tracking-wider text-[#f99d72]">The AI Panel</span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1a1814]">Five personalities. Zero scripts.</h2>
+      <p class="text-base text-stone-500">Each participant has a distinct voice, speaking style, and behavioural rules. They respond to each other — not just to you.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Mr. Verma -->
+      <div class="card space-y-3">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-full bg-stone-900 text-white font-bold flex items-center justify-center text-sm">MV</div>
+          <div>
+            <h4 class="font-bold text-sm text-[#1a1814]">Mr. Verma</h4>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-stone-100 text-stone-700 font-semibold">Moderator</span>
+          </div>
+        </div>
+        <p class="text-xs text-stone-600">Neutral, time-conscious, and formal. Keeps the discussion on track and manages turn equity.</p>
+        <div class="p-2.5 rounded bg-stone-50 font-mono text-[11px] text-stone-700 border border-stone-200">
+          "Candidates, let us hear from those who have not yet spoken on latency trade-offs."
+        </div>
+      </div>
+
+      <!-- Aarav -->
+      <div class="card space-y-3 border-red-500/20">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-full bg-red-600 text-white font-bold flex items-center justify-center text-sm">AR</div>
+          <div>
+            <h4 class="font-bold text-sm text-[#1a1814]">Aarav</h4>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-red-50 text-red-600 font-semibold">The Dominator</span>
+          </div>
+        </div>
+        <p class="text-xs text-stone-600">Fast, assertive, and competitive. Challenges weak points and attacks naive assumptions.</p>
+        <div class="p-2.5 rounded bg-stone-50 font-mono text-[11px] text-stone-700 border border-stone-200">
+          "I disagree with Candidate 4. In high-concurrency production, that design creates immediate bottlenecks."
+        </div>
+      </div>
+
+      <!-- Priya -->
+      <div class="card space-y-3 border-cyan-500/20">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-full bg-cyan-600 text-white font-bold flex items-center justify-center text-sm">PR</div>
+          <div>
+            <h4 class="font-bold text-sm text-[#1a1814]">Priya</h4>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-700 font-semibold">Data-Driven</span>
+          </div>
+        </div>
+        <p class="text-xs text-stone-600">Calm, structured, and quantitative. Backs arguments with metrics, surveys, and architectural benchmarks.</p>
+        <div class="p-2.5 rounded bg-stone-50 font-mono text-[11px] text-stone-700 border border-stone-200">
+          "According to recent surveys across top tech firms, seventy-four percent prioritize fault tolerance over raw velocity."
+        </div>
+      </div>
+
+      <!-- Rohan -->
+      <div class="card space-y-3 border-amber-500/20">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-full bg-amber-600 text-white font-bold flex items-center justify-center text-sm">RO</div>
+          <div>
+            <h4 class="font-bold text-sm text-[#1a1814]">Rohan</h4>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 font-semibold">The Synthesizer</span>
+          </div>
+        </div>
+        <p class="text-xs text-stone-600">Warm, diplomatic, and collaborative. Connects disparate viewpoints to formulate unified solutions.</p>
+        <div class="p-2.5 rounded bg-stone-50 font-mono text-[11px] text-stone-700 border border-stone-200">
+          "Candidate 4 and Priya both make strong points. Let's combine Priya's metrics with Candidate 4's framework."
+        </div>
+      </div>
+
+      <!-- Neha -->
+      <div class="card space-y-3 border-purple-500/20">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-full bg-purple-600 text-white font-bold flex items-center justify-center text-sm">NE</div>
+          <div>
+            <h4 class="font-bold text-sm text-[#1a1814]">Neha</h4>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 font-semibold">The Quiet Thinker</span>
+          </div>
+        </div>
+        <p class="text-xs text-stone-600">Speaks rarely, but asks deep first-principles questions that reframe the entire discussion.</p>
+        <div class="p-2.5 rounded bg-stone-50 font-mono text-[11px] text-stone-700 border border-stone-200">
+          "Are we optimizing the technology for cost efficiency, or are we fundamentally solving user trust?"
+        </div>
+      </div>
+
+      <!-- More Personas Card -->
+      <div class="card border-dashed border-stone-300 flex flex-col items-center justify-center text-center p-6 space-y-2 bg-[#fafaf9]">
+        <div class="w-10 h-10 rounded-full bg-stone-100 flex items-center justify-center text-stone-500">
+          <i data-lucide="plus" class="w-5 h-5"></i>
+        </div>
+        <h4 class="font-bold text-sm text-stone-800">Custom & Industry Personas</h4>
+        <p class="text-xs text-stone-500 max-w-xs">Case consultants, enterprise architects, and HR leaders added weekly.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. REPORT PREVIEW SECTION -->
+  <section id="report-preview" class="py-24 bg-[#fafaf9] border-y border-stone-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      <div class="lg:col-span-5 space-y-6">
+        <span class="text-xs font-bold uppercase tracking-wider text-[#f99d72]">The Report</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1a1814] tracking-tight">Feedback with receipts.</h2>
+        <p class="text-base text-stone-500">Every point in your report links to an exact moment in your transcript. No vague "you did well" — you get quoted evidence and one clear fix.</p>
+        
+        <div class="space-y-3 text-xs text-stone-700">
+          <div class="flex items-start gap-2.5">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5"></i>
+            <span><strong>Turn-by-turn Airtime Share:</strong> Visualizes if you dominated, balanced, or stayed invisible.</span>
+          </div>
+          <div class="flex items-start gap-2.5">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5"></i>
+            <span><strong>6-Vector Dimension Scores:</strong> Opening, Idea Quality, Synthesis, Listening, Interruptions, and Closing.</span>
+          </div>
+          <div class="flex items-start gap-2.5">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5"></i>
+            <span><strong>Quoted Evidence:</strong> Real timestamps showing exactly where your logic held or cracked.</span>
+          </div>
+          <div class="flex items-start gap-2.5">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5"></i>
+            <span><strong>Missed Openings Replay:</strong> Shows moments where you could have intervened to lead the room.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Mock Scorecard -->
+      <div class="lg:col-span-7">
+        <div class="card !p-6 shadow-xl bg-white border border-[rgba(38,57,90,0.16)] space-y-5">
+          <div class="flex items-center justify-between pb-4 border-b border-stone-100">
+            <div>
+              <span class="text-[10px] uppercase font-bold text-stone-400">Campus Placement Assessment</span>
+              <h3 class="font-bold text-base text-[#1a1814]">Group Discussion Performance Report</h3>
+            </div>
+            <div class="text-right">
+              <span class="text-2xl font-black text-emerald-600">8.2<span class="text-xs text-stone-400 font-normal">/10</span></span>
+              <div class="text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full border border-purple-200 uppercase">Tier: Elite (Shortlisted)</div>
+            </div>
+          </div>
+
+          <!-- Talk time bar -->
+          <div class="space-y-1.5 text-xs">
+            <div class="flex justify-between text-stone-500 font-medium text-[11px]">
+              <span>Airtime Participation</span>
+              <span class="text-emerald-700 font-bold">You: 28% (Optimal)</span>
+            </div>
+            <div class="w-full h-2.5 rounded-full bg-stone-100 overflow-hidden flex">
+              <div class="h-full bg-red-500" style="width: 30%"></div>
+              <div class="h-full bg-cyan-500" style="width: 25%"></div>
+              <div class="h-full bg-amber-500" style="width: 17%"></div>
+              <div class="h-full bg-emerald-500" style="width: 28%"></div>
+            </div>
+          </div>
+
+          <!-- Sample Feedback Quote Card -->
+          <div class="p-3.5 rounded-lg bg-stone-50 border-l-4 border-emerald-500 space-y-1 text-xs">
+            <span class="text-[10px] uppercase font-bold text-emerald-700">[01:45] Key Strength — Rebuttal Poise</span>
+            <p class="text-stone-800 italic">"Teachers build critical thinking and emotional resilience that models cannot synthesize."</p>
+            <p class="text-stone-500 text-[11px]"><strong>Evaluator note:</strong> Clear assertion defended with composure when countered by Aarav.</p>
+          </div>
+
+          <!-- Missed Opportunity Card -->
+          <div class="p-3.5 rounded-lg bg-stone-50 border-l-4 border-amber-500 space-y-1 text-xs">
+            <span class="text-[10px] uppercase font-bold text-amber-700">[03:12] Missed Opportunity — Data Rebuttal</span>
+            <p class="text-stone-600 text-[11px]">Priya quoted student-to-teacher retention data. You could have countered with cost per pupil metrics.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. FEATURES GRID -->
+  <section class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+      <span class="text-xs font-bold uppercase tracking-wider text-[#f99d72]">Built In</span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1a1814]">Everything a real GD room has — and nothing it doesn't.</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="card space-y-2">
+        <i data-lucide="user-check" class="w-5 h-5 text-[#f99d72]"></i>
+        <h4 class="font-bold text-sm text-[#1a1814]">Moderator-Run Structure</h4>
+        <p class="text-xs text-stone-500">Mr. Verma opens, enforces time limits, manages aggressive speakers, and triggers closing rounds.</p>
+      </div>
+
+      <div class="card space-y-2">
+        <i data-lucide="mic-2" class="w-5 h-5 text-[#f99d72]"></i>
+        <h4 class="font-bold text-sm text-[#1a1814]">Real Turn-Taking & Barge-In</h4>
+        <p class="text-xs text-stone-500">AI candidates listen and yield when you interrupt, just like in a high-stakes corporate placement round.</p>
+      </div>
+
+      <div class="card space-y-2">
+        <i data-lucide="messages-square" class="w-5 h-5 text-[#f99d72]"></i>
+        <h4 class="font-bold text-sm text-[#1a1814]">AI-to-AI Debate</h4>
+        <p class="text-xs text-stone-500">Participants don't just wait for you — they challenge each other and build competing alliances.</p>
+      </div>
+
+      <div class="card space-y-2">
+        <i data-lucide="subtitles" class="w-5 h-5 text-[#f99d72]"></i>
+        <h4 class="font-bold text-sm text-[#1a1814]">Live Captions Feed</h4>
+        <p class="text-xs text-stone-500">Every spoken sentence is color-coded with exact timestamps for effortless real-time tracking.</p>
+      </div>
+
+      <div class="card space-y-2">
+        <i data-lucide="bell-ring" class="w-5 h-5 text-[#f99d72]"></i>
+        <h4 class="font-bold text-sm text-[#1a1814]">Silent In-Session Nudges</h4>
+        <p class="text-xs text-stone-500">Discreet cues alert you if you haven't spoken in 2 minutes or if you have interrupted excessively.</p>
+      </div>
+
+      <div class="card space-y-2">
+        <i data-lucide="history" class="w-5 h-5 text-[#f99d72]"></i>
+        <h4 class="font-bold text-sm text-[#1a1814]">Replay Missed Openings</h4>
+        <p class="text-xs text-stone-500">Post-session breakdown flags conversational gaps where you could have taken room leadership.</p>
+      </div>
+
+      <div class="card space-y-2">
+        <i data-lucide="languages" class="w-5 h-5 text-[#f99d72]"></i>
+        <h4 class="font-bold text-sm text-[#1a1814]">Hindi–English Rooms</h4>
+        <p class="text-xs text-stone-500">Full support for Hinglish and Indian technical phrasing commonly used in campus drives.</p>
+      </div>
+
+      <div class="card space-y-2">
+        <i data-lucide="shield-check" class="w-5 h-5 text-[#f99d72]"></i>
+        <h4 class="font-bold text-sm text-[#1a1814]">Failure-Proof Fallback</h4>
+        <p class="text-xs text-stone-500">Seamless multi-model fallback across Google Gemini, OpenRouter, and Groq LPUs.</p>
+      </div>
+
+      <div class="card space-y-2">
+        <i data-lucide="accessibility" class="w-5 h-5 text-[#f99d72]"></i>
+        <h4 class="font-bold text-sm text-[#1a1814]">Accessible by Default</h4>
+        <p class="text-xs text-stone-500">Automatic fallback to text keyboard input if microphone permission is blocked or unavailable.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. PRACTICE FORMATS -->
+  <section id="formats" class="py-24 bg-[#fafaf9] border-y border-stone-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+        <span class="text-xs font-bold uppercase tracking-wider text-[#f99d72]">Practice Formats</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1a1814]">Pick your pressure.</h2>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="card space-y-3 text-center p-6">
+          <span class="text-3xl">🎯</span>
+          <h4 class="font-bold text-base text-[#1a1814]">Abstract Rounds</h4>
+          <p class="text-xs text-stone-500">"Is ambition overrated?" Tests lateral thinking, philosophy, and structured analogies.</p>
+        </div>
+
+        <div class="card space-y-3 text-center p-6">
+          <span class="text-3xl">🔥</span>
+          <h4 class="font-bold text-base text-[#1a1814]">Controversial Topics</h4>
+          <p class="text-xs text-stone-500">"Should campus placements be banned?" Tests emotional composure and firm counter-arguments.</p>
+        </div>
+
+        <div class="card space-y-3 text-center p-6">
+          <span class="text-3xl">📊</span>
+          <h4 class="font-bold text-base text-[#1a1814]">Case-Based Scenarios</h4>
+          <p class="text-xs text-stone-500">"Startup runway crisis." Tests business trade-offs, economics, and pragmatic consensus building.</p>
+        </div>
+
+        <div class="card space-y-3 text-center p-6">
+          <span class="text-3xl">🐠</span>
+          <h4 class="font-bold text-base text-[#1a1814]">Fishbowl & 1-on-1</h4>
+          <p class="text-xs text-stone-500">Simulate intense technical and HR interview grillings with Ms. Kapoor on your exact resume projects.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. SCORING PHILOSOPHY -->
+  <section id="scoring" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+      <span class="text-xs font-bold uppercase tracking-wider text-[#f99d72]">Scoring Philosophy</span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1a1814]">We don't hand out passes.</h2>
+      <p class="text-base text-stone-500">GD Arena is strict on purpose. We judge behaviour, language, and reasoning patterns — not intelligence. If you're not ready, we'll tell you.</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="card border-t-4 border-red-500 space-y-2">
+        <span class="text-xs font-bold text-red-600 uppercase">Weak (0–4)</span>
+        <h4 class="font-bold text-sm text-[#1a1814]">Cut in Round 1</h4>
+        <p class="text-xs text-stone-500">Hesitant entry, zero references to peer arguments, or ungrounded contradictions.</p>
+      </div>
+
+      <div class="card border-t-4 border-amber-500 space-y-2">
+        <span class="text-xs font-bold text-amber-600 uppercase">Average (4–6)</span>
+        <h4 class="font-bold text-sm text-[#1a1814]">Survive, Not Stand Out</h4>
+        <p class="text-xs text-stone-500">Good points but passive participation; failed to take initiative or summarize.</p>
+      </div>
+
+      <div class="card border-t-4 border-emerald-500 space-y-2">
+        <span class="text-xs font-bold text-emerald-600 uppercase">Strong (6–8)</span>
+        <h4 class="font-bold text-sm text-[#1a1814]">Shortlisted</h4>
+        <p class="text-xs text-stone-500">Structured initiation, composed rebuttals against Aarav, and clear domain grounding.</p>
+      </div>
+
+      <div class="card border-t-4 border-purple-500 space-y-2">
+        <span class="text-xs font-bold text-purple-600 uppercase">Elite (8–10)</span>
+        <h4 class="font-bold text-sm text-[#1a1814]">Lead the Room</h4>
+        <p class="text-xs text-stone-500">Set the conversational framework, defended points with metrics, and drove consensus.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. FAQ ACCORDION -->
+  <section id="faq" class="py-24 bg-[#fafaf9] border-y border-stone-100">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-xl mx-auto mb-16 space-y-3">
+        <span class="text-xs font-bold uppercase tracking-wider text-[#f99d72]">FAQ</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1a1814]">Frequently Asked Questions</h2>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <div class="card !p-4 cursor-pointer" onclick="toggleFaq(this)">
+          <div class="flex items-center justify-between font-bold text-sm text-[#1a1814]">
+            <span>Are the other participants real people?</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-stone-500 transition-transform"></i>
+          </div>
+          <div class="faq-content hidden mt-3 text-stone-600 leading-relaxed pt-2 border-t border-stone-100">
+            No, all other participants (Aarav, Priya, Rohan, Neha, Mr. Verma) are autonomous AI personas with specialized behavioral instructions. This provides a 100% judgment-free environment to practice without social anxiety.
+          </div>
+        </div>
+
+        <div class="card !p-4 cursor-pointer" onclick="toggleFaq(this)">
+          <div class="flex items-center justify-between font-bold text-sm text-[#1a1814]">
+            <span>Does it work if my microphone is denied or unavailable?</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-stone-500 transition-transform"></i>
+          </div>
+          <div class="faq-content hidden mt-3 text-stone-600 leading-relaxed pt-2 border-t border-stone-100">
+            Yes! GD Arena automatically activates a fast keyboard input fallback bar if microphone permissions are denied, allowing you to practice structured text debate.
+          </div>
+        </div>
+
+        <div class="card !p-4 cursor-pointer" onclick="toggleFaq(this)">
+          <div class="flex items-center justify-between font-bold text-sm text-[#1a1814]">
+            <span>Can I interrupt the AI participants while they speak?</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-stone-500 transition-transform"></i>
+          </div>
+          <div class="faq-content hidden mt-3 text-stone-600 leading-relaxed pt-2 border-t border-stone-100">
+            Yes! GD Arena features real-time voice barge-in. When you start speaking or hit "Interrupt", the AI instantly yields audio and records how gracefully you handled conversational collision.
+          </div>
+        </div>
+
+        <div class="card !p-4 cursor-pointer" onclick="toggleFaq(this)">
+          <div class="flex items-center justify-between font-bold text-sm text-[#1a1814]">
+            <span>Is the feedback really honest or generic praise?</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-stone-500 transition-transform"></i>
+          </div>
+          <div class="faq-content hidden mt-3 text-stone-600 leading-relaxed pt-2 border-t border-stone-100">
+            The scoring engine does not auto-pass candidates. If you hesitate, give shallow buzzword answers, or fail to engage with peer arguments, the scorecard explicitly flags it with timestamps and quotes.
+          </div>
+        </div>
+
+        <div class="card !p-4 cursor-pointer" onclick="toggleFaq(this)">
+          <div class="flex items-center justify-between font-bold text-sm text-[#1a1814]">
+            <span>Which languages and accents are supported?</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-stone-500 transition-transform"></i>
+          </div>
+          <div class="faq-content hidden mt-3 text-stone-600 leading-relaxed pt-2 border-t border-stone-100">
+            GD Arena natively supports Indian English (en-IN) and Hinglish phrasing, using Microsoft Neural voices and Web Speech API tuned for campus placements.
+          </div>
+        </div>
+
+        <div class="card !p-4 cursor-pointer" onclick="toggleFaq(this)">
+          <div class="flex items-center justify-between font-bold text-sm text-[#1a1814]">
+            <span>How long does a session take?</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-stone-500 transition-transform"></i>
+          </div>
+          <div class="faq-content hidden mt-3 text-stone-600 leading-relaxed pt-2 border-t border-stone-100">
+            You can select 5, 8, or 15-minute GD rounds. 1-on-1 Mock Interviews are structured into 8 progressive questions taking approximately 15–20 minutes.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. FINAL CTA -->
+  <section class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <div class="card !p-12 lg:!p-16 bg-[#1a1814] text-white border-0 shadow-2xl relative overflow-hidden space-y-6 max-w-4xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-stone-300 text-xs font-semibold">
+        <span>Free to try · No signup required</span>
+      </div>
+
+      <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
+        Your next GD starts right now.
+      </h2>
+
+      <p class="text-base text-stone-300 max-w-xl mx-auto">
+        Walk in, speak up, and walk out with a report that actually tells you the truth before real placement drives begin.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-4 pt-4">
+        <a href="/pages/mode-select.html" class="btn-primary !py-3.5 !px-8 !text-sm">
+          <span>Enter the room — it's free</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+        <a href="/pages/resume-upload.html" class="btn-secondary !py-3.5 !px-6 !text-sm !bg-white/10 !text-white !border-white/20 hover:!bg-white/20">
+          <span>Upload Resume for 1-on-1</span>
+        </a>
+      </div>
+
+      <p class="text-[11px] text-stone-400 pt-3">
+        All participants except you are AI. No human moderators. No recordings shared with anyone.
+      </p>
+    </div>
+  </section>
+
+  <!-- 13. FOOTER -->
+  <footer class="border-t border-stone-200 bg-white py-12 text-xs text-stone-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <div class="space-y-3">
+        <div class="flex items-center gap-2">
+          <div class="w-6 h-6 rounded-full bg-[#f99d72] flex items-center justify-center font-bold text-[#1a1814] text-xs">GD</div>
+          <span class="font-bold text-sm text-[#1a1814]">GD Arena</span>
+        </div>
+        <p class="text-stone-500 text-[11px] leading-relaxed">
+          Voice-first AI placement interview and group discussion simulation platform.
+        </p>
+        <p class="text-[10px] text-stone-400">
+          ⚠️ AI Disclosure: All peers and evaluators are simulated AI models.
+        </p>
+      </div>
+
+      <div>
+        <h5 class="font-bold text-stone-900 mb-3 text-xs uppercase tracking-wider">Product</h5>
+        <ul class="space-y-2">
+          <li><a href="#how-it-works" class="hover:text-stone-900">How it works</a></li>
+          <li><a href="#ai-panel" class="hover:text-stone-900">AI Panel</a></li>
+          <li><a href="#report-preview" class="hover:text-stone-900">Feedback Reports</a></li>
+          <li><a href="#faq" class="hover:text-stone-900">FAQ</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h5 class="font-bold text-stone-900 mb-3 text-xs uppercase tracking-wider">Practice Tracks</h5>
+        <ul class="space-y-2">
+          <li><a href="/pages/mode-select.html" class="hover:text-stone-900">1-on-1 Tech Interview</a></li>
+          <li><a href="/pages/mode-select.html" class="hover:text-stone-900">4-Person Campus GD</a></li>
+          <li><a href="/pages/resume-upload.html" class="hover:text-stone-900">Resume Matching Drill</a></li>
+          <li><a href="/pages/history.html" class="hover:text-stone-900">Past Scorecards</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h5 class="font-bold text-stone-900 mb-3 text-xs uppercase tracking-wider">Hackathon & Open Source</h5>
+        <ul class="space-y-2">
+          <li><span class="text-stone-600">LLOYD Hackathon 2026</span></li>
+          <li><span class="text-stone-600">Problem Statement 2: GD Arena</span></li>
+          <li><a href="https://github.com/Kartikey-Bhadauria" target="_blank" class="hover:text-stone-900 flex items-center gap-1">GitHub Repo <i data-lucide="external-link" class="w-3 h-3"></i></a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 border-t border-stone-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px]">
+      <p>© 2026 GD Arena. Built for students, by students.</p>
+      <div class="flex items-center gap-4 text-stone-400">
+        <span>Privacy Policy</span> • <span>Terms of Service</span> • <span>Security</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/landing.js" type="module"></script>
+</body>
+</html>
