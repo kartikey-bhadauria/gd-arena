@@ -6,7 +6,7 @@
       "src": "api/index.py",
       "use": "@vercel/python",
       "config": {
-        "includeFiles": "public/**;server/**;data/**"
+        "includeFiles": "public/**;server/**;data/**;server/public/**"
       }
     }
   ],

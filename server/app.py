@@ -34,9 +34,11 @@ from server.turn_engine import TurnEngine
 from server.report_engine import score_session_stats, generate_report_json
 from server.resume_parser import parse_resume_text, match_jd_skills
 
-DIRECTORY = os.path.join(PROJECT_ROOT, "public")
+DIRECTORY = os.path.join(PROJECT_ROOT, "server", "public")
 if not os.path.exists(DIRECTORY):
-    for alt in [os.path.join(os.getcwd(), "public"), "/var/task/public", os.path.join(os.path.dirname(__file__), "..", "public"), os.path.join(os.path.dirname(os.path.abspath(__file__)), "public")]:
+    DIRECTORY = os.path.join(PROJECT_ROOT, "public")
+if not os.path.exists(DIRECTORY):
+    for alt in [os.path.join(os.getcwd(), "server", "public"), os.path.join(os.getcwd(), "public"), "/var/task/server/public", "/var/task/public", os.path.join(os.path.dirname(__file__), "..", "server", "public")]:
         if os.path.exists(alt):
             DIRECTORY = alt
             break
