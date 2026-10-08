@@ -27,27 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (!report) {
-    report = {
-      overall_score: 7.8,
-      tier: "Strong",
-      pass: true,
-      review_statement: "Candidate demonstrated professional readiness on 'Will AI Replace Software Engineers?'. Successfully anchored arguments with clear reasoning, navigated active interruptions, and synthesized constructive outcomes.",
-      stats: { talk_time_pct: { student: 28, aarav: 32, priya: 25, rohan: 15 } },
-      dimensions: {
-        opening: { score: 8.0, quote: "I believe AI will augment engineers, not replace them.", comment: "Clear and confident opening statement." },
-        idea_quality: { score: 7.5, quote: "We still need humans to handle edge cases.", comment: "Solid domain reasoning." },
-        building_on_others: { score: 7.0, quote: "That's a fair point on velocity.", comment: "Built constructively on peer statements." },
-        listening: { score: 8.0, quote: "Listening to Aarav's point on benchmarks.", comment: "Maintained good composure." },
-        handling_interruptions: { score: 7.5, quote: "Defending architecture decisions.", comment: "Handled interruptions professionally." },
-        closing: { score: 7.8, quote: "In summary, hybrid teams outperform pure automation.", comment: "Strong concluding synthesis." }
-      },
-      strengths: ["Strong opening posture", "Clear articulation of system design principles", "Maintained composure under aggressive AI questioning"],
-      weaknesses: ["Could cite more concrete production latency metrics"],
-      missed_openings: [
-        { ts: "02:15", what_happened: "Allowed Aarav to dominate the scalability argument without quantitative pushback.", what_you_could_have_said: "Priya noted 40% efficiency gains, but our benchmarks show cold-start latency spikes." }
-      ],
-      drills: ["Practice 60-second quantitative rebuttal drills", "Structure closing summaries using the MECE framework"]
-    };
+    alert("No assessment session found. Please complete a round first.");
+    window.location.href = "/pages/mode-select.html";
+    return;
   }
 
   // Save to history storage if present
@@ -57,6 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function renderReport(data) {
+  const titleEl = document.getElementById('reportTopic');
+  if (titleEl) {
+    titleEl.textContent = data.assessment_title || (data.mode === 'interview' ? '1-on-1 Technical Interview Assessment' : 'Group Discussion Performance Assessment');
+  }
+
   document.getElementById('overallScore').innerHTML = `${data.overall_score}<span class="text-xs text-stone-400 font-normal">/10</span>`;
 
   const tierBadge = document.getElementById('tierBadge');

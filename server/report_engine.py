@@ -53,7 +53,6 @@ def generate_report_json(transcript, topic, stats, mode="gd"):
     last_quote = student_entries[-1]["text"] if has_student else "No closing synthesis provided."
     last_ts = student_entries[-1].get("timestamp", "04:15") if has_student else "00:00"
 
-    # Fully deterministic transcript-sensitive scoring based on real performance metrics
     student_words = stats.get("student_words", 0)
     student_turns = stats.get("student_turns", 0)
     interrupt_count = stats.get("interruptions", 0)
@@ -100,45 +99,70 @@ def generate_report_json(transcript, topic, stats, mode="gd"):
          + listen_score * 1.5 + interruption_score * 1.0 + closing_score * 1.5) / 9.0, 1
     )
     
-    # Strict Pass rule: No auto-pass; must score >= 6.0 and no critical dimension below 5.0
     critical_fail = any(s < 4.5 for s in [opening_score, idea_score, listen_score])
     passed = (overall >= 6.0) and not critical_fail
     tier = calculate_tier(overall)
 
-    # Generate Final Comprehensive Review Statement
     if passed:
-        review_statement = f"Candidate demonstrated professional readiness on '{topic}'. Successfully anchored arguments with clear reasoning, navigated active interruptions, and synthesized constructive outcomes."
+        review_statement = f"Candidate demonstrated professional readiness for '{topic}'. Successfully anchored arguments with clear reasoning, navigated active grilling, and synthesized strong outcomes."
     else:
-        review_statement = f"Candidate did not meet the placement passing threshold for '{topic}'. Key improvement needed in substantive domain grounding, active structured listening, and avoiding evasive or off-topic responses."
+        review_statement = f"Candidate did not meet the placement passing threshold for '{topic}'. Key improvement needed in substantive domain depth, structured elaboration, and concise articulation."
 
-    # Dynamically find peer challenges for missed openings from real transcript
-    ai_challenges = [t for t in transcript if t.get("speaker") not in ["student", "user", "candidate", "system"] and ("?" in t.get("text", "") or "however" in t.get("text", "").lower() or "cost" in t.get("text", "").lower() or "evidence" in t.get("text", "").lower())]
+    ai_challenges = [t for t in transcript if t.get("speaker") not in ["student", "user", "candidate", "system"] and ("?" in t.get("text", "") or "however" in t.get("text", "").lower() or "cost" in t.get("text", "").lower())]
     
     missed_openings = []
     if ai_challenges:
         ch = ai_challenges[0]
-        spk_name = ch.get('speaker', 'Peer').capitalize()
+        spk_name = ch.get('speaker', 'Interviewer').capitalize()
         ch_text = ch.get('text', '')
         missed_openings.append({
             "ts": ch.get("timestamp", "02:15"),
-            "what_happened": f"{spk_name} raised a point on trade-offs: \"{ch_text[:80]}...\"",
-            "what_you_could_have_said": f"Acknowledge {spk_name}'s perspective on {topic} while defending architectural maintainability and reliability."
+            "what_happened": f"{spk_name} probed a technical trade-off: \"{ch_text[:80]}...\"",
+            "what_you_could_have_said": f"Structure your response around quantifiable performance metrics, maintainability, and scalability guarantees."
         })
     else:
         missed_openings.append({
             "ts": "01:45",
-            "what_happened": "Opportunity to anchor the discussion around verifiable trade-offs and quantitative metrics.",
-            "what_you_could_have_said": f"We need to balance {topic} with long-term engineering maintainability and p99 performance guarantees."
+            "what_happened": "Opportunity to elaborate further on system architecture constraints and edge-case handling.",
+            "what_you_could_have_said": "Address the trade-off by citing specific failure modes and mitigation strategies."
         })
 
-    return {
-        "overall_score": overall,
-        "tier": tier,
-        "pass": passed,
-        "review_statement": review_statement,
-        "transcript": transcript,
-        "stats": stats,
-        "dimensions": {
+    if mode == "interview":
+        dimensions = {
+            "opening": {
+                "score": opening_score,
+                "quote": f"[{first_ts}] \"{first_quote}\"",
+                "comment": "Clear initial introduction and alignment with background."
+            },
+            "idea_quality": {
+                "score": idea_score,
+                "quote": f"[{first_ts}] \"{first_quote}\"",
+                "comment": "Demonstrated technical understanding of core domain principles."
+            },
+            "building_on_others": {
+                "score": build_score,
+                "quote": f"[{last_ts}] \"{last_quote}\"",
+                "comment": "Addressed follow-up questions with logical elaboration."
+            },
+            "listening": {
+                "score": listen_score,
+                "quote": f"[{first_ts}] Active listening demonstrated across interaction.",
+                "comment": "Maintained attentive pacing and constructive engagement."
+            },
+            "handling_interruptions": {
+                "score": interruption_score,
+                "quote": f"[{last_ts}] Handled probing questions with composure.",
+                "comment": f"Responded to rigorous grilling with professional poise."
+            },
+            "closing": {
+                "score": closing_score,
+                "quote": f"[{last_ts}] \"{last_quote}\"",
+                "comment": "Provided a cohesive summary of value proposition."
+            }
+        }
+        assessment_title = "1-on-1 Technical Interview Assessment"
+    else:
+        dimensions = {
             "opening": {
                 "score": opening_score,
                 "quote": f"[{first_ts}] \"{first_quote}\"",
@@ -169,9 +193,21 @@ def generate_report_json(transcript, topic, stats, mode="gd"):
                 "quote": f"[{last_ts}] \"{last_quote}\"",
                 "comment": "Synthesized the group discussion consensus clearly before the timer expired."
             }
-        },
+        }
+        assessment_title = "Group Discussion Performance Assessment"
+
+    return {
+        "overall_score": overall,
+        "tier": tier,
+        "pass": passed,
+        "mode": mode,
+        "assessment_title": assessment_title,
+        "review_statement": review_statement,
+        "transcript": transcript,
+        "stats": stats,
+        "dimensions": dimensions,
         "strengths": [
-            f"Demonstrated composure when countered: \"{first_quote[:75]}\" (Clear, unapologetic defense).",
+            f"Demonstrated composure when challenged: \"{first_quote[:75]}\" (Clear, professional framing).",
             "Effective use of domain terminology without relying on shallow buzzwords."
         ],
         "weaknesses": [
@@ -179,12 +215,12 @@ def generate_report_json(transcript, topic, stats, mode="gd"):
             "Could cite more quantitative benchmarks (e.g. p99 latency, throughput) to solidify arguments."
         ],
         "red_flags": [
-            "Avoided direct engagement or paused abruptly during peer rebuttal."
+            "Avoided direct engagement or paused abruptly during grilling."
         ] if overall < 6.5 else [],
         "missed_openings": missed_openings,
         "drills": [
-            "Drill 1: 30-second rapid counter-argument formulation under aggressive peer interruption.",
+            "Drill 1: 30-second rapid counter-argument formulation under aggressive probing.",
             "Drill 2: STAR method structure for high-concurrency failure mode questions.",
-            "Drill 3: First-principles synthesis to establish group leadership in the opening 60 seconds."
+            "Drill 3: First-principles synthesis to establish clear leadership in the opening 60 seconds."
         ]
     }
