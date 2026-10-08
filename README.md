@@ -82,14 +82,27 @@ python server.py
 
 ---
 
-## 📸 Interface Screenshot
+## 📸 Interface Screenshots
 
 <div align="center">
 
-### 🌟 Landing & Mode Selection
-*Sleek, high-impact dark/light interface designed for peak focus.*\
-<br>
+### 🌟 Landing & Hero Section
 <img src="docs/screenshots/landing.png" width="850px" alt="Landing Page">
+
+<br><br>
+
+### 📄 Resume Intake & Staging Flow
+<img src="docs/screenshots/resume-upload.png" width="850px" alt="Resume Upload">
+
+<br><br>
+
+### ⚡ Active Group Discussion Room
+<img src="docs/screenshots/gd-room.png" width="850px" alt="GD Room">
+
+<br><br>
+
+### 📊 Quote-Verified Performance Report
+<img src="docs/screenshots/report.png" width="850px" alt="Performance Report">
 
 </div>
 
