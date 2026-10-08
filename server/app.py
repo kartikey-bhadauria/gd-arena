@@ -544,16 +544,28 @@ def serve_page(filename):
 
 @app.route('/css/<path:filename>')
 def serve_css(filename):
+    for d in [os.path.join(STATIC_DIR, 'css'), os.path.join(PROJECT_ROOT, 'server', 'static', 'css'), os.path.join(os.path.dirname(__file__), 'static', 'css'), '/var/task/server/static/css']:
+        if os.path.exists(os.path.join(d, filename)):
+            return send_from_directory(d, filename)
     return send_from_directory(os.path.join(STATIC_DIR, 'css'), filename)
 
 @app.route('/js/<path:filename>')
 def serve_js(filename):
+    for d in [os.path.join(STATIC_DIR, 'js'), os.path.join(PROJECT_ROOT, 'server', 'static', 'js'), os.path.join(os.path.dirname(__file__), 'static', 'js'), '/var/task/server/static/js']:
+        if os.path.exists(os.path.join(d, filename)):
+            return send_from_directory(d, filename)
     return send_from_directory(os.path.join(STATIC_DIR, 'js'), filename)
 
 @app.route('/assets/<path:filename>')
 def serve_assets(filename):
+    for d in [os.path.join(STATIC_DIR, 'assets'), os.path.join(PROJECT_ROOT, 'server', 'static', 'assets'), os.path.join(os.path.dirname(__file__), 'static', 'assets'), '/var/task/server/static/assets']:
+        if os.path.exists(os.path.join(d, filename)):
+            return send_from_directory(d, filename)
     return send_from_directory(os.path.join(STATIC_DIR, 'assets'), filename)
 
 @app.route('/favicon.ico')
 def favicon():
+    for d in [STATIC_DIR, os.path.join(PROJECT_ROOT, 'server', 'static'), os.path.join(os.path.dirname(__file__), 'static'), '/var/task/server/static']:
+        if os.path.exists(os.path.join(d, 'favicon.ico')):
+            return send_from_directory(d, 'favicon.ico')
     return send_from_directory(STATIC_DIR, 'favicon.ico')
