@@ -234,17 +234,29 @@ class GDArenaServerHandler(SimpleHTTPRequestHandler):
 
             import re
             is_rejected = False
+            warning_count = session.get("rubbish_warnings", 0)
+            warning_msg = None
+
             if "[REJECT:" in ai_text:
                 match = re.search(r'\[REJECT:(.*?)\]', ai_text)
-                if match:
+                reason = match.group(1).strip() if match else "Off-topic or unprofessional remarks."
+                session["rubbish_warnings"] = warning_count + 1
+                warning_count = session["rubbish_warnings"]
+
+                if warning_count >= 5:
                     session["rejected"] = True
-                    session["reject_reason"] = match.group(1).strip()
+                    session["reject_reason"] = f"5 Warnings Exceeded: {reason}"
                     is_rejected = True
-                    ai_text = re.sub(r'\[REJECT:.*?\]', '', ai_text).strip()
-                    if not ai_text:
-                        ai_text = "We will contact you later. This session is terminated."
+                    ai_text = "We will contact you later. You have exceeded all 5 conduct and relevance warnings. This session is terminated."
                     next_spk = "interviewer" if session["mode"] == "interview" else "moderator"
                     persona = PERSONAS.get(next_spk, PERSONAS["aarav"])
+                else:
+                    is_rejected = False
+                    cleaned_ai = re.sub(r'\[REJECT:.*?\]', '', ai_text).strip()
+                    warning_msg = f"Warning {warning_count}/5 for off-topic/conduct: {reason}"
+                    ai_text = f"[Official Warning {warning_count}/5]: {cleaned_ai or 'Please stay strictly on topic and maintain professional debate conduct.'}"
+            else:
+                pass
 
             session["transcript"].append({
                 "id": len(session["transcript"]) + 1,
@@ -267,7 +279,9 @@ class GDArenaServerHandler(SimpleHTTPRequestHandler):
                 "rate": persona["rate"],
                 "pitch": persona["pitch"],
                 "color": persona["color"],
-                "rejected": session.get("rejected", False)
+                "rejected": session.get("rejected", False),
+                "warnings": session.get("rubbish_warnings", 0),
+                "warning_msg": warning_msg
             }).encode('utf-8'))
             return
 
@@ -375,13 +389,15 @@ class GDArenaServerHandler(SimpleHTTPRequestHandler):
                     "overall_score": 0.0,
                     "tier": "Disqualified",
                     "pass": False,
+                    "review_statement": f"Candidate was disqualified during the session. Reason: {session.get('reject_reason', 'Repeated off-topic or unprofessional statements (5 warnings exceeded).')}",
+                    "transcript": transcript,
                     "stats": stats,
                     "dimensions": {},
                     "strengths": [],
-                    "weaknesses": [f"Session Auto-Terminated: {session.get('reject_reason', 'Nonsense or Unprofessionalism')}"],
+                    "weaknesses": [f"Session Auto-Terminated: {session.get('reject_reason', '5 Warnings Exceeded for conduct/relevance')}"],
                     "red_flags": ["Professionalism Violation / Gibberish Detected. Session ended abruptly."],
                     "missed_openings": [],
-                    "drills": ["Practice maintaining professional boundaries and answering relevance."]
+                    "drills": ["Practice structured answering, professional debate boundaries, and active listening."]
                 }
             else:
                 report_data = generate_report_json(transcript, topic, stats)

@@ -16,7 +16,8 @@ export class RoomController {
     this.topic = localStorage.getItem('gd_selected_topic') || 'Should AI Replace Entry-Level Software Engineers?';
     this.transcript = [];
     this.secondsElapsed = 0;
-    this.totalSeconds = mode === 'interview' ? 15 * 60 : 8 * 60;
+    this.totalSeconds = 10 * 60; // Exact 10 mins timer
+    this.warningCount = 0;
     this.timerInterval = null;
 
     this.turnManager = new TurnManager();
@@ -199,8 +200,13 @@ export class RoomController {
           this.tts.speak(res.text, res.voice, res.rate, res.pitch, res.speaker);
           this.turnManager.noteAISpoke(res.speaker);
           
+          if (res.warnings) {
+            this.warningCount = res.warnings;
+            this.showNotice(res.warning_msg || `Conduct Warning ${this.warningCount}/5 issued.`);
+          }
+
           if (res.rejected) {
-            this.showNotice("Session Terminated by Evaluator.");
+            this.showNotice("Session Terminated: Exceeded 5 Conduct/Relevance Warnings.");
             this.stt.stop();
             const micBtn = document.getElementById('micToggleBtn');
             if (micBtn) micBtn.disabled = true;

@@ -141,6 +141,34 @@ function renderReport(data) {
     </div>
   `).join('');
 
+  // Evaluator Review Statement
+  const reviewEl = document.getElementById('evaluatorReviewStatement');
+  if (reviewEl) {
+    reviewEl.textContent = data.review_statement || "Candidate evaluated according to official placement assessment rubric across domain competence, logical synthesis, and verbal fluency.";
+  }
+
+  // Full Quoted Transcript Log
+  const transcript = data.transcript || [];
+  const turnCountEl = document.getElementById('transcriptTurnCount');
+  if (turnCountEl) turnCountEl.textContent = transcript.length;
+
+  const feed = document.getElementById('fullTranscriptFeed');
+  if (feed && transcript.length > 0) {
+    feed.innerHTML = transcript.map(t => {
+      const isStudent = t.speaker === 'student' || t.speaker === 'user';
+      const color = isStudent ? '#059669' : (PERSONAS[t.speaker]?.color || '#1a1814');
+      return `
+        <div class="p-2 rounded ${isStudent ? 'bg-emerald-50/50 border border-emerald-100' : 'bg-stone-50 border border-stone-100'}">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-stone-400 font-mono text-[10px]">[${t.timestamp || '00:00'}]</span>
+            <span class="font-bold text-[11px]" style="color: ${color}">${t.name || t.speaker}:</span>
+          </div>
+          <p class="text-stone-800 text-xs">${t.text}</p>
+        </div>
+      `;
+    }).join('');
+  }
+
   if (window.lucide) window.lucide.createIcons();
 }
 

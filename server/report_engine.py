@@ -66,10 +66,18 @@ def generate_report_json(transcript, topic, stats):
     passed = (overall >= 6.0) and not critical_fail
     tier = calculate_tier(overall)
 
+    # Generate Final Comprehensive Review Statement
+    if passed:
+        review_statement = f"Candidate demonstrated professional readiness on '{topic}'. Successfully anchored arguments with clear reasoning, navigated active interruptions, and synthesized constructive outcomes."
+    else:
+        review_statement = f"Candidate did not meet the placement passing threshold for '{topic}'. Key improvement needed in substantive domain grounding, active structured listening, and avoiding evasive or off-topic responses."
+
     return {
         "overall_score": overall,
         "tier": tier,
         "pass": passed,
+        "review_statement": review_statement,
+        "transcript": transcript,
         "stats": stats,
         "dimensions": {
             "opening": {

@@ -99,9 +99,13 @@
     });
 
     elementsToReveal.forEach((el, index) => {
-      // Add baseline reveal class if not already custom
-      if (!el.classList.contains('reveal-left') && !el.classList.contains('reveal-right') && !el.classList.contains('reveal-scale')) {
-        el.classList.add('reveal-up');
+      // Alternate direction between reveal-up and reveal-down unless explicitly set
+      if (!el.classList.contains('reveal-left') && !el.classList.contains('reveal-right') && !el.classList.contains('reveal-scale') && !el.classList.contains('reveal-down') && !el.classList.contains('reveal-up')) {
+        if (index % 2 === 0) {
+          el.classList.add('reveal-up');
+        } else {
+          el.classList.add('reveal-down');
+        }
       }
 
       // If parent has grid or flex, add incremental transition-delay for smooth wave stagger

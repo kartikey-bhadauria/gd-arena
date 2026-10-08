@@ -426,7 +426,14 @@ header.header-scrolled {
 /* Base Scroll Reveal Classes */
 .reveal-up {
   opacity: 0;
-  transform: translateY(32px);
+  transform: translateY(36px);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-down {
+  opacity: 0;
+  transform: translateY(-36px);
   transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
@@ -454,6 +461,7 @@ header.header-scrolled {
 
 /* Revealed State */
 .reveal-up.revealed,
+.reveal-down.revealed,
 .reveal-left.revealed,
 .reveal-right.revealed,
 .reveal-scale.revealed {
