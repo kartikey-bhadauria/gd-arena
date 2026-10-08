@@ -94,3 +94,17 @@ export async function getSession(sessionId) {
     return null;
   }
 }
+
+export async function generateTopics(category = 'Technology & Architecture') {
+  try {
+    const res = await fetch(`${API_BASE}/api/generate-topics`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ category })
+    });
+    return await res.json();
+  } catch (err) {
+    console.error('generateTopics error:', err);
+    return { topics: [] };
+  }
+}

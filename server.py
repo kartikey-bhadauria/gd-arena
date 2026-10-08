@@ -231,6 +231,20 @@ class GDArenaServerHandler(SimpleHTTPRequestHandler):
             # Generate AI dialogue turn
             ai_text = self.generate_llm_turn(persona, session["topic"], session["mode"], student_text, session["transcript"])
 
+            import re
+            is_rejected = False
+            if "[REJECT:" in ai_text:
+                match = re.search(r'\[REJECT:(.*?)\]', ai_text)
+                if match:
+                    session["rejected"] = True
+                    session["reject_reason"] = match.group(1).strip()
+                    is_rejected = True
+                    ai_text = re.sub(r'\[REJECT:.*?\]', '', ai_text).strip()
+                    if not ai_text:
+                        ai_text = "We will contact you later. This session is terminated."
+                    next_spk = "interviewer" if session["mode"] == "interview" else "moderator"
+                    persona = PERSONAS.get(next_spk, PERSONAS["aarav"])
+
             session["transcript"].append({
                 "id": len(session["transcript"]) + 1,
                 "speaker": next_spk,
@@ -251,7 +265,8 @@ class GDArenaServerHandler(SimpleHTTPRequestHandler):
                 "voice": persona["voice"],
                 "rate": persona["rate"],
                 "pitch": persona["pitch"],
-                "color": persona["color"]
+                "color": persona["color"],
+                "rejected": session.get("rejected", False)
             }).encode('utf-8'))
             return
 
@@ -354,7 +369,21 @@ class GDArenaServerHandler(SimpleHTTPRequestHandler):
             interruptions = session.get('interruptions', 0)
 
             stats = score_session_stats(transcript, interruptions)
-            report_data = generate_report_json(transcript, topic, stats)
+            if session.get("rejected"):
+                report_data = {
+                    "overall_score": 0.0,
+                    "tier": "Disqualified",
+                    "pass": False,
+                    "stats": stats,
+                    "dimensions": {},
+                    "strengths": [],
+                    "weaknesses": [f"Session Auto-Terminated: {session.get('reject_reason', 'Nonsense or Unprofessionalism')}"],
+                    "red_flags": ["Professionalism Violation / Gibberish Detected. Session ended abruptly."],
+                    "missed_openings": [],
+                    "drills": ["Practice maintaining professional boundaries and answering relevance."]
+                }
+            else:
+                report_data = generate_report_json(transcript, topic, stats)
 
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
@@ -384,6 +413,52 @@ class GDArenaServerHandler(SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps(parsed).encode('utf-8'))
             return
 
+        # 6. Generate Custom Placement Topics API
+        if path == '/api/generate-topics':
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_length).decode('utf-8')
+            try:
+                payload = json.loads(body)
+            except Exception:
+                payload = {}
+
+            category = payload.get('category', 'Technology & Architecture')
+            
+            prompt = f"Generate 3 sharp, highly competitive campus placement Group Discussion topics for engineering candidates on '{category}'. Return ONLY a JSON array of 3 strings. No markdown, no numbers, no explanations."
+            
+            topics = [
+                "Should AI Agents Have Autonomous Deployment Permissions in Production?",
+                "Microservices Sprawl vs Monolith Simplicity for High-Velocity Startups",
+                "Is Remote Work Weakening Junior Engineering Architecture Mentorship?"
+            ]
+
+            if GOOGLE_KEY:
+                try:
+                    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key={GOOGLE_KEY}"
+                    req = urllib.request.Request(
+                        url,
+                        headers={"Content-Type": "application/json"},
+                        data=json.dumps({
+                            "contents": [{"parts": [{"text": prompt}]}],
+                            "generationConfig": {"maxOutputTokens": 100, "temperature": 0.8}
+                        }).encode('utf-8')
+                    )
+                    with urllib.request.urlopen(req, timeout=6) as resp:
+                        res_json = json.loads(resp.read().decode('utf-8'))
+                        raw_text = res_json['candidates'][0]['content']['parts'][0]['text'].strip()
+                        raw_text = raw_text.replace('```json', '').replace('```', '').strip()
+                        parsed = json.loads(raw_text)
+                        if isinstance(parsed, list) and len(parsed) >= 2:
+                            topics = parsed[:3]
+                except Exception as e:
+                    print(f"Topic generation fallback: {e}")
+
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({"topics": topics}).encode('utf-8'))
+            return
+
         super().do_POST()
 
     def generate_llm_turn(self, persona, topic, mode, student_text, transcript):
@@ -391,6 +466,8 @@ class GDArenaServerHandler(SimpleHTTPRequestHandler):
         recent_context = "\n".join([f"{t['name']}: {t['text']}" for t in transcript[-4:]])
 
         prompt = f"""{system_instruction}
+
+CRITICAL RULE: If the candidate speaks complete nonsense, gibberish, acts unprofessionally, or goes entirely off-topic, you MUST reject them immediately. Start your response EXACTLY with "[REJECT: <brief reason>]". Then say "We will contact you later. This session is terminated."
 
 Recent Discussion Context:
 {recent_context}

@@ -1,3 +1,4 @@
+import { SpeechAnalytics } from './fluency.js';
 // GD Arena & Interview Room Live Voice Orchestration Engine
 // STRICT VOICE RULE: Only one voice at a time. Student speech always wins.
 
@@ -28,6 +29,9 @@ export class RoomController {
     this.micStream = null;
     this.isMicActive = false;
     this.lastStudentSpeechTs = 0;
+    this.analytics = new SpeechAnalytics({
+      onUpdate: (stats) => this.updateFluencyUI(stats)
+    });
     this.pendingThinkingTimeout = null;
   }
 
@@ -147,6 +151,7 @@ export class RoomController {
     this.hideThinkingState();
     this.clearActiveSpeaker();
     this.turnManager.noteStudentSpoke();
+    this.analytics.processText(text);
 
     if (isManualButton) {
       this.showNudge("You claimed the floor. Speak now.");
@@ -158,6 +163,7 @@ export class RoomController {
     if (!text || !text.trim()) return;
     this.lastStudentSpeechTs = this.secondsElapsed;
     this.turnManager.noteStudentSpoke();
+    this.analytics.processText(text);
 
     const ts = this.formatTime(this.secondsElapsed);
     this.addCaption('student', 'You', text, ts);
@@ -192,9 +198,31 @@ export class RoomController {
           this.addCaption(res.speaker, res.persona, res.text, this.formatTime(this.secondsElapsed));
           this.tts.speak(res.text, res.voice, res.rate, res.pitch, res.speaker);
           this.turnManager.noteAISpoke(res.speaker);
+          
+          if (res.rejected) {
+            this.showNotice("Session Terminated by Evaluator.");
+            this.stt.stop();
+            const micBtn = document.getElementById('micToggleBtn');
+            if (micBtn) micBtn.disabled = true;
+            // Wait for rejection audio to finish then end
+            setTimeout(() => this.endSession(), 4500);
+          }
         }
       }
     }, SESSION.reactionDelay);
+  }
+
+
+  updateFluencyUI(stats) {
+    const paceEl = document.getElementById('livePaceBadge');
+    if (paceEl) {
+      paceEl.textContent = `${stats.wpm} WPM (${stats.status}) · ${stats.fillerCount} Fillers`;
+      if (stats.status === "Optimal Pace") {
+        paceEl.className = "text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200";
+      } else {
+        paceEl.className = "text-[10px] font-mono px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200";
+      }
+    }
   }
 
   showThinkingState() {

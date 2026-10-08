@@ -65,6 +65,9 @@ function renderReport(data) {
     tierBadge.className = "mt-1 text-[11px] font-bold px-3 py-0.5 rounded-full inline-block uppercase bg-red-50 text-red-700 border border-red-200";
   } else if (data.tier === 'Average') {
     tierBadge.className = "mt-1 text-[11px] font-bold px-3 py-0.5 rounded-full inline-block uppercase bg-amber-50 text-amber-700 border border-amber-200";
+  } else if (data.tier === 'Disqualified') {
+    tierBadge.className = "mt-1 text-[11px] font-bold px-3 py-0.5 rounded-full inline-block uppercase bg-red-900 text-white border border-red-700";
+    document.getElementById('overallScore').innerHTML = `<span class="text-red-600">REJECTED</span>`;
   } else if (data.tier === 'Elite') {
     tierBadge.className = "mt-1 text-[11px] font-bold px-3 py-0.5 rounded-full inline-block uppercase bg-purple-50 text-purple-700 border border-purple-200";
   }
