@@ -270,8 +270,9 @@ def session_start():
     topic = payload.get('topic', 'Will Generative AI Replace Entry-Level Software Engineers?')
     panel_size = int(payload.get('panel_size', 4))
     s_id = str(uuid.uuid4())[:8]
-
-    turn_engine = TurnEngine()
+    all_panel = ["aarav", "priya", "rohan", "neha"]
+    selected_panel = all_panel[:panel_size] if panel_size in [3, 4] else all_panel
+    turn_engine = TurnEngine(personas=selected_panel)
     resume_info = payload.get('resume', {})
 
     if mode == 'interview':
@@ -290,6 +291,7 @@ def session_start():
         "mode": mode,
         "topic": topic,
         "panel_size": panel_size,
+        "panel_keys": selected_panel,
         "resume": resume_info,
         "start_time": time.time(),
         "turn_engine": turn_engine,
@@ -368,7 +370,7 @@ def chat():
             "text": student_text
         })
 
-    next_spk = turn_engine.next_speaker(mode=session["mode"])
+    next_spk = turn_engine.next_speaker(mode=session["mode"], panel_keys=session.get("panel_keys"))
     persona = PERSONAS.get(next_spk, PERSONAS["aarav"])
     turn_engine.note_ai_spoke(next_spk)
 

@@ -37,18 +37,17 @@ class TurnEngine:
         if mode == "interview":
             return "interviewer"
 
-        # After 2 AI turns in a row, moderator steps in to invite student/manage room
         if self.should_invite_student():
             return "moderator"
 
-        available = [k for k in (panel_keys or ["aarav", "priya", "rohan", "neha"]) if k != "moderator"]
+        active_panel = panel_keys or self.personas
+        available = [k for k in active_panel if k != "moderator"]
         
-        # Weighted random selection: aarav: 4, priya: 3, rohan: 3, neha: 1
         weights = {"aarav": 4, "priya": 3, "rohan": 3, "neha": 1}
         filtered_pool = [k for k in available if k not in self.last_two_speakers]
         if not filtered_pool:
             filtered_pool = available
-
+        
         pool_weights = [weights.get(k, 2) for k in filtered_pool]
         chosen = random.choices(filtered_pool, weights=pool_weights, k=1)[0]
         return chosen
