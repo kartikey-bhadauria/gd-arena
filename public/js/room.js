@@ -220,20 +220,6 @@ export class RoomController {
           this.addCaption(res.speaker, res.persona, res.text, this.formatTime(this.secondsElapsed));
           this.tts.speak(res.text, res.voice, res.rate, res.pitch, res.speaker);
           this.turnManager.noteAISpoke(res.speaker);
-          
-          if (res.warnings) {
-            this.warningCount = res.warnings;
-            this.showNotice(res.warning_msg || `Conduct Warning ${this.warningCount}/5 issued.`);
-          }
-
-          if (res.rejected) {
-            this.showNotice("Session Terminated: Exceeded 5 Conduct/Relevance Warnings.");
-            this.stt.stop();
-            const micBtn = document.getElementById('micToggleBtn');
-            if (micBtn) micBtn.disabled = true;
-            // Wait for rejection audio to finish then end
-            setTimeout(() => this.endSession(), 4500);
-          }
         }
       }
     }, SESSION.reactionDelay);

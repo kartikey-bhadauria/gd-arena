@@ -239,34 +239,9 @@ class GDArenaServerHandler(SimpleHTTPRequestHandler):
             # Generate AI dialogue turn
             ai_text = self.generate_llm_turn(persona, session["topic"], session["mode"], student_text, session["transcript"], session.get("resume"))
 
+            # Clean any stray formatting tags
             import re
-            is_rejected = False
-            warning_count = session.get("rubbish_warnings", 0)
-            warning_msg = None
-
-            if "[REJECT:" in ai_text:
-                match = re.search(r'\[REJECT:(.*?)]', ai_text)
-                reason = match.group(1).strip() if match else "Off-topic or irrelevant remarks."
-                session["rubbish_warnings"] = warning_count + 1
-                warning_count = session["rubbish_warnings"]
-
-                if warning_count >= 5:
-                    session["rejected"] = True
-                    session["reject_reason"] = f"5 Warnings Exceeded: {reason}"
-                    is_rejected = True
-                    ai_text = "We will contact you later. You have exceeded all 5 conduct and relevance warnings. This session is terminated."
-                    next_spk = "interviewer" if session["mode"] == "interview" else "moderator"
-                    persona = PERSONAS.get(next_spk, PERSONAS["aarav"])
-                    warning_msg = "Final Strike 5/5: Session Terminated."
-                else:
-                    is_rejected = False
-                    cleaned_ai = re.sub(r'\[REJECT:.*?\]', '', ai_text).strip()
-                    # Ensure warnings 1-4 never say 'we will contact you later' or 'session terminated'
-                    cleaned_ai = re.sub(r'(?i)(we will contact you later|session is terminated|this session is terminated|you are rejected)', '', cleaned_ai).strip(' .,-')
-                    warning_msg = f"Warning {warning_count}/5: {reason}"
-                    ai_text = f"[Official Warning {warning_count}/5]: {cleaned_ai or 'Please focus your remarks directly on the topic and maintain professional discussion standards.'}"
-            else:
-                pass
+            ai_text = re.sub(r'\[REJECT:.*?\]', '', ai_text).strip()
 
             session["transcript"].append({
                 "id": len(session["transcript"]) + 1,
@@ -289,9 +264,7 @@ class GDArenaServerHandler(SimpleHTTPRequestHandler):
                 "rate": persona["rate"],
                 "pitch": persona["pitch"],
                 "color": persona["color"],
-                "rejected": session.get("rejected", False),
-                "warnings": session.get("rubbish_warnings", 0),
-                "warning_msg": warning_msg
+                "rejected": False
             }).encode('utf-8'))
             return
 
@@ -496,17 +469,22 @@ class GDArenaServerHandler(SimpleHTTPRequestHandler):
         if resume and resume.get("skills"):
             resume_context = f"\nCandidate Stated Resume Profile: Skills: [{', '.join(resume['skills'][:5])}], Projects: [{', '.join(resume.get('projects', [])[:2])}]"
 
+        if mode == "interview":
+            task_instruction = f"You are interviewing the candidate on '{topic}'. Critically analyze their statement, probe technical depth, or ask a sharp follow-up question related to architecture, scaling, or edge cases."
+        else:
+            task_instruction = f"You are participating in a fast-paced, high-stakes campus placement group discussion on '{topic}'. Actively debate what was just said: agree, disagree, introduce concrete examples, or challenge the candidate's premises in your unique persona style."
+
         prompt = f"""{system_instruction}
 {resume_context}
 
-CRITICAL RULE: If the candidate speaks complete nonsense, gibberish, acts unprofessionally, or goes entirely off-topic, you MUST flag it. Start your response EXACTLY with "[REJECT: <brief reason>]". Then give a brief 1-sentence warning reminding them to stay relevant to the topic. Do NOT write "We will contact you later" or terminate the session yourself (the system tracks warning counts automatically).
+Task: {task_instruction}
 
-Recent Discussion Context:
+Recent Discussion Flow:
 {recent_context}
 
-Last statement by Candidate: "{student_text}"
+Last Statement by Candidate: "{student_text}"
 
-Respond as {persona['name']} in 1-2 spoken sentences (under 35 words). No markdown, no quotes, no asterisks:"""
+Respond as {persona['name']} in 1-2 spoken sentences (under 35 words). Be direct, conversational, and debate naturally. Never use markdown, bullet points, asterisks, or quotes:"""
 
         # 1. Primary: Google Gemini Flash Lite
         if GOOGLE_KEY:
